@@ -188,9 +188,32 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                                  # div(plotOutput("reg.plotx",  width=fig.width7, height=fig.height7)) 
                                                   
                                            ))),
-                                       h4(paste("xxxxxxxxxxxxxxxxxxxxxxx")), 
-                                       h4(htmlOutput("textWithNumber",) ),
+
+h4(htmlOutput("textWithNumber",) ),
+                                       h4(paste("Using the following")), 
+
+
+withMathJax(
+  
+  helpText(
+    tags$span(style="color:black",
+              ' 
+              $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
+              '))),
+
+
+
+
+                                   
+                                      h4(htmlOutput("textWithNumber2",) ),
+
                                        div(plotOutput("his",  width=fig.width7, height=fig.height7)),
+
+
+
+
+
+
                               ) ,
                               
                               tabPanel("2 xxxxxxx", value=3, 
@@ -395,180 +418,68 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                    # 
                                    
                                    
+                                   
+                                   
+                                  # withMathJax(),
+                                   # section below allows in-line LaTeX via $ in mathjax.
+                                   #tags$div(HTML("")),
+                                   #helpText('An irrational number $\sqrt{2}$ and a fraction $1-\frac{1}{2}$'),
+                                   
+                                   
+                                  #$$\\frac{{ {\\chi^2}_{(n - 1)}}} {\\sigma^2}  \\!$$ degrees of freedom (n being the number of replicate measurements)
+                                   
                                    # h4("xxxxxxxxxxxxxxxxxx.")
                                    tags$span(style="color:black",
-                                   HTML(" <strong>When the between variance component is estimated to be negative we apply the following adjustments.</strong>")),
-                                   
-                                   tags$span(style="color:black",     
-                                   p("Since three batches is not sufficient to reliably estimate the between batch component, the total
-                                        variances are estimated as the between canister variance of the 'super-batch' consisting of the three
-                                        batches combined [2]. It is not uncommon that the mean square between (MSB) is less than the mean square within (MSW) with a one way ANOVA. This results in a negative estimate 
-                                        for the between variance component. 
-                             Thus concluding there is no additional variability due to the between variance component. In such cases the FDA PBE equations are adjusted. 
-                             We have",HTML(" <em>m</em>"),"replicates, 
-                             ",HTML(" <em>n</em>")," items per batch and",HTML(" <em>l</em>"),"is the no batches per product (test and reference). Refer to the FDA guidance document.")
-                                   ),
+                                   HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance sigma squared")),
+
                                    br(),
-                                   
-                                  #, tags$span(style="color:red",  p4( dis) ) ,
-                                  tags$span(style="color:black",
-                                   HTML(" <strong>Impact to the total variances</strong>")),
-                                  
-                                   
-                                   withMathJax(
-                                     helpText(  tags$span(style="color:black",'
-                           $${{\\sigma_R = }{\\sqrt{\\frac{MSB_R}{m} + \\frac{(m-1)MSW_R}{m}}}}\\!$$'))),   
-                                   
-                                   
+
                                    withMathJax(
                                     
                                      helpText(
                                        tags$span(style="color:black",
-                                     'This is equal to $${{}\\sigma_R ={\\sqrt{\\frac{MSB_R-MSW_R}{m} + MSW_R}}}\\!$$ In the event that $$MSB_R < MSW_R$$then $$MSB_R - MSW_R < 0$$and 
-                                         therefore $$\\sigma_R <  {\\sqrt{MSW_R}}$$
-                              This means the total variance is less than the within variance component which cannot be.
-                                                  If this is encountered the total variance is set equal to the within variance component. 
-                                                  For either or both reference or test product if necessary. This is the first change from the guidance.'))),
+                                     'It is well known, with n being the number of replicate measurements, that 
+                                     
+                                     $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\sim {\\chi^2}_{(n - 1)}  \\qquad  \\qquad \\qquad  \\qquad \\left[ 1 \\right]  \\!$$ 
                                    
-                                   withMathJax(
-                                     helpText('Therefore if $$MSB_R < MSW_R$$ then')),
+                                     recall
+                                         
+                                     $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {(n-1)}  =  {\\it{s}^2}\\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 2 \\right]  \\!$$
+                                         
+                                     hence
+                                     
+                                     $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 3 \\right]  \\!$$ 
+                                     
+                                     as a side note we can see
+                                     
+                                     $${{ {\\sum_i} (X_i - \\bar{X})^2}} =  {\\it{s}^2} {(n-1)} \\qquad \\qquad \\qquad \\qquad \\left[4 \\right]  \\!$$ 
+                                     
+                                     now we can calculate a specification when we know the true population variance...
+                                     
+                                     $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
+                                     
+                                    so if we have a reliable estimate of the population variance, 
+                                    we can calculate a specification say 95% confidence (50000 in a million) or 99.9997% (3 in a million) to see if the sample replicate variation
+                                    is consistent with the population variance. A specification such as 3 in a million is useful for example in the diagnostic industry,
+                                    where huge numbers of replicates are run in the field, during testing and analytical studies for example.
+                                     
+                                     br(),
+                                     
+                                     now if we want to calculate a confidence interval for the population variance.  
+                                     
+                                     $$ {  P\\left[ {(\\chi^2}_{(n - 1), (\\alpha/2)})   \\le {     {\\chi^2}_{(n - 1)} \\le \ {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }     \\right] =   1-\\alpha}  \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 6 \\right]  \\!$$  
+                                     
+                                     the quantity chi-square is now replaced by its equivalent 
+
+                                      $$ {  P\\left[ {(\\chi^2}_{(n - 1), (\\alpha/2)})   \\le { \\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2}  \\le  {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }     \\right]   =   1-\\alpha}  \\qquad \\qquad  \\qquad \\qquad    \\left[ 7 \\right]  \\!$$ 
+                                     
+                                     this can be rearranged to 
+                                     
+                                      $$ {  P\\left[   { \\frac{  {\\it{s}^2} {(n-1)} } {(\\chi^2_{(n - 1), (1-\\alpha/2)} )}}     \\le   {\\sigma^2}  \\le  { \\frac{  {\\it{s}^2} {(n-1)} } {(\\chi^2_{(n - 1), (\\alpha/2)}) }}     \\right]    =   1-\\alpha    }  \\qquad \\qquad  \\qquad\\qquad \\qquad  \\qquad \\left[ 8 \\right]  \\!$$ 
+
+                                     '))),
                                    
-                                   
-                                   
-                                   withMathJax(
-                                     helpText(" $$\\sigma_R =  {\\sqrt{MSW_R}}$$")),
-                                   
-                                   withMathJax(
-                                     helpText('and if $$MSB_T < MSW_T$$ then')),
-                                   
-                                   
-                                   withMathJax(
-                                     helpText(" $$\\sigma_T =  {\\sqrt{MSW_T}}$$")),
-                                   
-                                   
-                                   HTML(" <strong>Impact to Delta and HD</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText('$$ \\hat{\\Delta} = \\bar{y}_T - \\bar{y}_R$$')),
-                                   
-                                   br(),
-                                   
-                                   withMathJax(
-                                     helpText("We have")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_T) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_T}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_T.l_T-1$$")),
-                                   br(),
-                                   withMathJax(
-                                     helpText("We have")),
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_R) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_R}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_R.l_R-1$$")),
-                                   
-                                   withMathJax(
-                                     helpText("The variances of the difference is equal to the sum of the variances, so")),
-                                   
-                                   withMathJax(
-                                     helpText('$$ Var\\hat{\\Delta} =  \\frac{MSB_T}{n.l.m} +  \\frac{MSB_R}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$(n_R.l_R-1) + (n_T.l_T-1) = (n_R.l_R + n_T.l_T-2)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("When there is no between variance component for either test or reference then:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_T) =  \\frac{MSW_T}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_T.l_T.(m-1)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("and")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_R) =  \\frac{MSW_R}{n.l.m} $$')),                                    
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_R.l_R.(m-1)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("and so depending on if one or both products has a single variance component, there are four scenarios for the calculation of HD including the one in the guidance:")),
-                                   
-                                   withMathJax(
-                                     helpText("I) Both have non negative variance components:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T-1 + n_R.l_R-1)}  
-                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("II) Both have negative variance components:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R.(m-1)}  
-                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("III) Test only has negative variance component:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R-1)}  
-                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("IV) Reference only has negative variance component:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                         t_{1-\\alpha,n_T.l_T-1  + n_R.l_R.(m-1)}  
-                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E1 and E2</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_T >= MSW_T$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E1 + E2 = \\frac{MSB_T}{m} + \\frac{(m-1) MSW_T }{m } = \\frac{MSB_T - MSW_T }{m}  +  MSW_T = \\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}$$ 
-                                                 which is the total variance of test products. 
-                                                 If we encounter a negative between variance component for the test product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E1 = 0, E2 = MSW_T$$ and H2 and U2 are unaltered.")), 
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E3s and E4s, reference scaling</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_ r >= MSW_R$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E3s + E4s = -(1+\\theta_p)\\frac{MSB_R}{m} -(1+\\theta_p) \\frac{(m-1) MSW_R }{m } = -(1+\\theta_p)\\left(\\frac{MSB_R - MSW_R }{m}  +
-                                        MSW_R\\right) = -(1+\\theta_p)\\left(\\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}\\right)$$ 
-                                        
-                                                 If we encounter a negative between variance component for the reference product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E3s = 0, E4s = -(1+\\theta_p)MSW_R$$ and H4s and U4s are unaltered.")), 
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E3c and E4c, constant scaling</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_ r >= MSW_R$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E3c + E4c = -\\frac{MSB_R}{m} + \\frac{(m-1) MSW_R }{m } = -\\left(\\frac{MSB_R - MSW_R }{m}  +  MSW_R\\right) = -\\left(\\hat{\\sigma^2_B} +
-                                        \\hat{\\sigma^2_W}\\right)$$ 
-                                                   
-                                                 If we encounter a negative between variance component for the test product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E3c = 0, E4c = -MSW_R$$ and H4c and U4c are unaltered.")), 
+                                    
                                    
                                    br(),
                                    br(),
@@ -1042,9 +953,9 @@ server <- shinyServer(function(input, output   ) {
    d1 <- sim()$sim.
     d <- spec()$spec.
     
-    HTML(paste0( "We have entered a population standard deviation of "
+    HTML(paste0( "With a population standard deviation of "
                  , tags$span(style="color:red",  p4( dis) ) ,
-                 " from a reliable source and we are planning to evaluate  "
+                 " from a reliable source we will evaluate  "
                  , tags$span(style="color:red",  p0(ctr) ) ," replicates.",
                  
                  br(), br(),  
@@ -1061,31 +972,10 @@ server <- shinyServer(function(input, output   ) {
                 "This means we are prepared to accept  "
                  , tags$span(style="color:red",  p0(or1*1e6) ) ,
                  " out of specification results in 1 million evaluations when in truth the " 
-                , tags$span(style="color:red",  p0(ctr) ) ," replicates are from the stated population. ",
-                 br(), br(),
-                 "Therefore if the standard deviation of the "
-               , tags$span(style="color:red",  p0(ctr) ) ,
-               " replicated measurements is less than or equal to the calculated specification of "
-                 
-                 , tags$span(style="color:red",  p4(d) ) ,
-                 
-                 " the error is considered consistent with the established test method error.",
-               
-               
-               br(), br(),  
-               
-               "We can also check the analytic derived specification of "
-                , tags$span(style="color:red",  p4( dis) ) ,
-              " using simulation, with "
-               , tags$span(style="color:red",  (n) ) ," Monte Carlo simulations",
-               
-               # br(), br(),  
-               
-               
-               #  tags$span(style="color:red",  p4(ctr) ) , 
-               
-               " we estimate the specification as "
-               , tags$span(style="color:red",  p4(d1) ) ,"."
+                , tags$span(style="color:red",  p0(ctr) ) ," replicates are from the stated population. "
+                
+
+           
                
               
                
@@ -1093,6 +983,59 @@ server <- shinyServer(function(input, output   ) {
     ))    
     
   })
+  
+  
+  output$textWithNumber2 <- renderText({ 
+    
+    
+    dis <- as.numeric(unlist(strsplit(input$dist,",")))
+    n <- as.numeric(unlist(strsplit(input$n,",")))
+    ctr <- as.numeric(unlist(strsplit(input$levels,",")))
+    or1<- as.numeric(unlist(strsplit(input$or1,",")))
+    
+    d1 <- sim()$sim.
+    d <- spec()$spec.
+    
+    HTML(paste0( 
+                 "We can state if the standard deviation of the "
+                 , tags$span(style="color:red",  p0(ctr) ) ,
+                 " replicated measurements is less than or equal to the calculated specification of "
+                 
+                 , tags$span(style="color:red",  p4(d) ) ,
+                 
+                 " the error is considered consistent with the established test method error.",
+                 
+                 
+                 br(), br(),  
+                 
+                 "We can also check the analytic derived specification of "
+                 , tags$span(style="color:red",  p4( dis) ) ,
+                 " using simulation, with "
+                 , tags$span(style="color:red",  (n) ) ," Monte Carlo simulations",
+                 
+                 # br(), br(),  
+                 
+                 
+                 #  tags$span(style="color:red",  p4(ctr) ) , 
+                 
+                 " we estimate the specification as "
+                 , tags$span(style="color:red",  p4(d1) ) ,"."
+                 
+                 
+                 
+                 
+    ))    
+    
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 })
 
