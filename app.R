@@ -48,6 +48,7 @@ p3 <- function(x) {formatC(x, format="f", digits=3)}
 p4 <- function(x) {formatC(x, format="f", digits=4)}
 p5 <- function(x) {formatC(x, format="f", digits=5)}
 p6 <- function(x) {formatC(x, format="f", digits=6)}
+p8 <- function(x) {formatC(x, format="f", digits=8)}
 logit <- function(p) log(1/(1/p-1))
 expit <- function(x) 1/(1/exp(x) + 1)
 inv_logit <- function(logit) exp(logit) / (1 + exp(logit))
@@ -109,14 +110,14 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                   ),
                                   
                                   textInput('n', 
-                                            div(h5(tags$span(style="color:blue", "Number of simulations"))), "1e5"),
+                                            div(h5(tags$span(style="color:blue", "Number of Monte Carlo simulations"))), "1e5"),
                                   
                                   tags$hr(),
                                   textInput('dist', 
-                                            div(h5(tags$span(style="color:blue", "Standard deviation"))), "3.7"),
+                                            div(h5(tags$span(style="color:blue", "Population standard deviation"))), "3.7"),
                                   
                                   textInput('levels', 
-                                            div(h5(tags$span(style="color:blue", "number of replicates"))), "5"),
+                                            div(h5(tags$span(style="color:blue", "Number of replicates to evaluate"))), "5"),
                                   tags$hr(), 
                                   textInput('or1', 
                                             div(h5(tags$span(style="color:blue", "alpha level"))), ".000003"),
@@ -169,26 +170,27 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                               
                               
                               tabPanel("1 xxxxxx", value=7, 
-                                       h4("If the standard deviation of the two replicated measurements is less than or equal to the stated specification, the error is considered consistent with the established test method error. 
-The baseline input required is a repeatability sd from a reliable source i.e. a precision study"),
+                                   #    h4("If the standard deviation of the two replicated measurements is less than or equal to the stated specification, the error is considered consistent with the established test method error. 
+#The baseline input required is a repeatability sd from a reliable source i.e. a precision study"),
                                       
               
                                        fluidRow(
                                          column(width = 6, offset = 0, style='padding:1px;',
                                                 
                                             #    div(plotOutput("beta",  width=fig.width7, height=fig.height7)),
-                                            div( verbatimTextOutput("dat") ),
+                                           # div( verbatimTextOutput("dat") ),
                                          ) ,
                                         
                                          
                                          fluidRow(
                                            column(width = 5, offset = 0, style='padding:1px;',
-                                                  div( verbatimTextOutput("dat1") ),
+                                        #         div( verbatimTextOutput("dat1") ),
                                                  # div(plotOutput("reg.plotx",  width=fig.width7, height=fig.height7)) 
                                                   
                                            ))),
                                        h4(paste("xxxxxxxxxxxxxxxxxxxxxxx")), 
                                        h4(htmlOutput("textWithNumber",) ),
+                                       div(plotOutput("his",  width=fig.width7, height=fig.height7)),
                               ) ,
                               
                               tabPanel("2 xxxxxxx", value=3, 
@@ -384,14 +386,194 @@ The baseline input required is a repeatability sd from a reliable source i.e. a 
                              tabPanel("10 xxxx", value=3, 
                                       
                                       #div(plotOutput("ecdfs", width=fig.width1, height=fig.height3)),
-                                      h4("Figure 11 xxxxxxxxxxxxxxxxxxxxxxxxx"), 
-                                      h4("xxxxxxxxxxxxxxxxxxxxxxxx"), 
-                                   # div(plotOutput("logitseries", width=fig.width1, height=fig.height3)),
-                                     
-                                      
-                                   h4("Figure 12 xxxxxxxxxxxxxxxxxxxxxxxxxx"),  
+                                   #    h4("Figure 11 xxxxxxxxxxxxxxxxxxxxxxxxx"), 
+                                   #    h4("xxxxxxxxxxxxxxxxxxxxxxxx"), 
+                                   # # div(plotOutput("logitseries", width=fig.width1, height=fig.height3)),
+                                   #   
+                                   #    
+                                   # h4("Figure 12 xxxxxxxxxxxxxxxxxxxxxxxxxx"),  
+                                   # 
                                    
-                                   h4("xxxxxxxxxxxxxxxxxx.")
+                                   
+                                   # h4("xxxxxxxxxxxxxxxxxx.")
+                                   tags$span(style="color:black",
+                                   HTML(" <strong>When the between variance component is estimated to be negative we apply the following adjustments.</strong>")),
+                                   
+                                   tags$span(style="color:black",     
+                                   p("Since three batches is not sufficient to reliably estimate the between batch component, the total
+                                        variances are estimated as the between canister variance of the 'super-batch' consisting of the three
+                                        batches combined [2]. It is not uncommon that the mean square between (MSB) is less than the mean square within (MSW) with a one way ANOVA. This results in a negative estimate 
+                                        for the between variance component. 
+                             Thus concluding there is no additional variability due to the between variance component. In such cases the FDA PBE equations are adjusted. 
+                             We have",HTML(" <em>m</em>"),"replicates, 
+                             ",HTML(" <em>n</em>")," items per batch and",HTML(" <em>l</em>"),"is the no batches per product (test and reference). Refer to the FDA guidance document.")
+                                   ),
+                                   br(),
+                                   
+                                  #, tags$span(style="color:red",  p4( dis) ) ,
+                                  tags$span(style="color:black",
+                                   HTML(" <strong>Impact to the total variances</strong>")),
+                                  
+                                   
+                                   withMathJax(
+                                     helpText(  tags$span(style="color:black",'
+                           $${{\\sigma_R = }{\\sqrt{\\frac{MSB_R}{m} + \\frac{(m-1)MSW_R}{m}}}}\\!$$'))),   
+                                   
+                                   
+                                   withMathJax(
+                                    
+                                     helpText(
+                                       tags$span(style="color:black",
+                                     'This is equal to $${{}\\sigma_R ={\\sqrt{\\frac{MSB_R-MSW_R}{m} + MSW_R}}}\\!$$ In the event that $$MSB_R < MSW_R$$then $$MSB_R - MSW_R < 0$$and 
+                                         therefore $$\\sigma_R <  {\\sqrt{MSW_R}}$$
+                              This means the total variance is less than the within variance component which cannot be.
+                                                  If this is encountered the total variance is set equal to the within variance component. 
+                                                  For either or both reference or test product if necessary. This is the first change from the guidance.'))),
+                                   
+                                   withMathJax(
+                                     helpText('Therefore if $$MSB_R < MSW_R$$ then')),
+                                   
+                                   
+                                   
+                                   withMathJax(
+                                     helpText(" $$\\sigma_R =  {\\sqrt{MSW_R}}$$")),
+                                   
+                                   withMathJax(
+                                     helpText('and if $$MSB_T < MSW_T$$ then')),
+                                   
+                                   
+                                   withMathJax(
+                                     helpText(" $$\\sigma_T =  {\\sqrt{MSW_T}}$$")),
+                                   
+                                   
+                                   HTML(" <strong>Impact to Delta and HD</strong>"),
+                                   
+                                   withMathJax(
+                                     helpText('$$ \\hat{\\Delta} = \\bar{y}_T - \\bar{y}_R$$')),
+                                   
+                                   br(),
+                                   
+                                   withMathJax(
+                                     helpText("We have")),
+                                   
+                                   withMathJax(
+                                     helpText('$$Var(\\bar{y}_T) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_T}{n.l.m} $$')),
+                                   
+                                   withMathJax(
+                                     helpText("with degrees of freedom $$n_T.l_T-1$$")),
+                                   br(),
+                                   withMathJax(
+                                     helpText("We have")),
+                                   withMathJax(
+                                     helpText('$$Var(\\bar{y}_R) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_R}{n.l.m} $$')),
+                                   
+                                   withMathJax(
+                                     helpText("with degrees of freedom $$n_R.l_R-1$$")),
+                                   
+                                   withMathJax(
+                                     helpText("The variances of the difference is equal to the sum of the variances, so")),
+                                   
+                                   withMathJax(
+                                     helpText('$$ Var\\hat{\\Delta} =  \\frac{MSB_T}{n.l.m} +  \\frac{MSB_R}{n.l.m} $$')),
+                                   
+                                   withMathJax(
+                                     helpText("with degrees of freedom $$(n_R.l_R-1) + (n_T.l_T-1) = (n_R.l_R + n_T.l_T-2)$$")),
+                                   
+                                   withMathJax(
+                                     helpText("When there is no between variance component for either test or reference then:")),
+                                   
+                                   withMathJax(
+                                     helpText('$$Var(\\bar{y}_T) =  \\frac{MSW_T}{n.l.m} $$')),
+                                   
+                                   withMathJax(
+                                     helpText("with degrees of freedom $$n_T.l_T.(m-1)$$")),
+                                   
+                                   withMathJax(
+                                     helpText("and")),
+                                   
+                                   withMathJax(
+                                     helpText('$$Var(\\bar{y}_R) =  \\frac{MSW_R}{n.l.m} $$')),                                    
+                                   
+                                   withMathJax(
+                                     helpText("with degrees of freedom $$n_R.l_R.(m-1)$$")),
+                                   
+                                   withMathJax(
+                                     helpText("and so depending on if one or both products has a single variance component, there are four scenarios for the calculation of HD including the one in the guidance:")),
+                                   
+                                   withMathJax(
+                                     helpText("I) Both have non negative variance components:")),
+                                   
+                                   withMathJax(
+                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
+                                        t_{1-\\alpha,n_T.l_T-1 + n_R.l_R-1)}  
+                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
+                                   
+                                   withMathJax(
+                                     helpText("II) Both have negative variance components:")),
+                                   
+                                   withMathJax(
+                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
+                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R.(m-1)}  
+                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
+                                   
+                                   withMathJax(
+                                     helpText("III) Test only has negative variance component:")),
+                                   
+                                   withMathJax(
+                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
+                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R-1)}  
+                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
+                                   
+                                   withMathJax(
+                                     helpText("IV) Reference only has negative variance component:")),
+                                   
+                                   withMathJax(
+                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
+                                         t_{1-\\alpha,n_T.l_T-1  + n_R.l_R.(m-1)}  
+                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
+                                   
+                                   HTML(" <strong>Impact on FDA parameters E1 and E2</strong>"),
+                                   
+                                   withMathJax(
+                                     helpText("When $$MSB_T >= MSW_T$$ we have")),
+                                   
+                                   withMathJax(
+                                     helpText("$$E1 + E2 = \\frac{MSB_T}{m} + \\frac{(m-1) MSW_T }{m } = \\frac{MSB_T - MSW_T }{m}  +  MSW_T = \\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}$$ 
+                                                 which is the total variance of test products. 
+                                                 If we encounter a negative between variance component for the test product we have shown above the total variance is estimated by the mean squares within. 
+                                                 
+                                                 So let $$E1 = 0, E2 = MSW_T$$ and H2 and U2 are unaltered.")), 
+                                   
+                                   HTML(" <strong>Impact on FDA parameters E3s and E4s, reference scaling</strong>"),
+                                   
+                                   withMathJax(
+                                     helpText("When $$MSB_ r >= MSW_R$$ we have")),
+                                   
+                                   withMathJax(
+                                     helpText("$$E3s + E4s = -(1+\\theta_p)\\frac{MSB_R}{m} -(1+\\theta_p) \\frac{(m-1) MSW_R }{m } = -(1+\\theta_p)\\left(\\frac{MSB_R - MSW_R }{m}  +
+                                        MSW_R\\right) = -(1+\\theta_p)\\left(\\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}\\right)$$ 
+                                        
+                                                 If we encounter a negative between variance component for the reference product we have shown above the total variance is estimated by the mean squares within. 
+                                                 
+                                                 So let $$E3s = 0, E4s = -(1+\\theta_p)MSW_R$$ and H4s and U4s are unaltered.")), 
+                                   
+                                   HTML(" <strong>Impact on FDA parameters E3c and E4c, constant scaling</strong>"),
+                                   
+                                   withMathJax(
+                                     helpText("When $$MSB_ r >= MSW_R$$ we have")),
+                                   
+                                   withMathJax(
+                                     helpText("$$E3c + E4c = -\\frac{MSB_R}{m} + \\frac{(m-1) MSW_R }{m } = -\\left(\\frac{MSB_R - MSW_R }{m}  +  MSW_R\\right) = -\\left(\\hat{\\sigma^2_B} +
+                                        \\hat{\\sigma^2_W}\\right)$$ 
+                                                   
+                                                 If we encounter a negative between variance component for the test product we have shown above the total variance is estimated by the mean squares within. 
+                                                 
+                                                 So let $$E3c = 0, E4c = -MSW_R$$ and H4c and U4c are unaltered.")), 
+                                   
+                                   br(),
+                                   br(),
+                                   br(),
+                                   br()
                                
                              ),
                               
@@ -466,23 +648,15 @@ server <- shinyServer(function(input, output   ) {
     n <- as.numeric(unlist(strsplit(input$n,",")))
     
     ctr <- as.numeric(unlist(strsplit(input$levels,",")))
-
-    # n1y1 <- log(as.numeric(unlist(strsplit(input$or1,","))))   # user enter odds , need log for the maths
-    # 
-    # n2y2 <- log(as.numeric(unlist(strsplit(input$or2,","))))    # user enter odds , need log for the maths
-    # 
     
      or1<- as.numeric(unlist(strsplit(input$or1,",")))
      
-    
     return(list(  
       n=n[1],       # Number of simulation
       lev=ctr[1],   # replicates
       or1=or1[1],   # alpha
       shape1=dis[1] # sd
-  
-   
-      
+     
     ))
     
   })
@@ -523,11 +697,10 @@ server <- shinyServer(function(input, output   ) {
     alpha.  <- sample$or1
     sd.  <-    sample$shape1
     
-    x<-replicate(n., sd(rnorm( reps.,0, sd.)) )
+    x <- replicate(n., sd(rnorm( reps.,0, sd.)) )
     sim. <- quantile(x, c(1-alpha.))
-    #hist(x, breaks=1e6/10, xlab="SD", main="Distribution of SD")
-    
-    return(list( x=x, sim.=sim.)) 
+
+    return(list( x=x, sim.=sim., n.=n.)) 
   })
   
   output$dat1 <- renderPrint({
@@ -542,7 +715,38 @@ server <- shinyServer(function(input, output   ) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
   
 
-  
+  output$his <- renderPlot({
+    
+    sample <- random.sample()
+    
+    d <-  sim()$x
+    n <-  sample$n
+    sp <- spec()$spec.
+    
+    reps. <-   sample$lev
+    dfx <- reps. -1
+    
+    
+    popsd <- as.numeric(unlist(strsplit(input$dist,",")))
+    n <- as.numeric(unlist(strsplit(input$n,",")))
+    
+    
+    h <-  hist(d, breaks=n/10, xlab="SD", 
+    main=paste("Distribution of",n, "SDs drawn from a population SD of",popsd,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
+    abline(v = sp, col = "blue", lwd = 2, lty=2)
+
+    xfit <- seq(min(d)-.5, max(d)+1, length = 40)
+    
+    yfit <- dchisq(xfit, df = dfx)
+    
+    yfit <- yfit * diff(h$mids[1:2]) *  n #length(d)
+    
+    lines(xfit, yfit, col = "black", lwd = 2)
+    
+    
+    
+    
+  })
   
   
   
@@ -849,16 +1053,19 @@ server <- shinyServer(function(input, output   ) {
                 #  tags$span(style="color:red",  p4(ctr) ) , 
             
                  " We have set the one sided alpha level to "
-                 , tags$span(style="color:red",  p6(or1) ) ,".",
-                 
-                 " This means we are prepared to accept  "
+                 , tags$span(style="color:red",  p8(or1) ) ,
+                ". This is equivalent to a upper confidence limit of ",
+                tags$span(style="color:red",  p5(100*(1-or1)) ) , 
+                tags$span(style="color:red",   "%. " ) , 
+                
+                "This means we are prepared to accept  "
                  , tags$span(style="color:red",  p0(or1*1e6) ) ,
-                 " out of specification results in 1 million evaluations. ",
-                 
+                 " out of specification results in 1 million evaluations when in truth the " 
+                , tags$span(style="color:red",  p0(ctr) ) ," replicates are from the stated population. ",
                  br(), br(),
-                 "If the standard deviation of the "
+                 "Therefore if the standard deviation of the "
                , tags$span(style="color:red",  p0(ctr) ) ,
-               " replicated measurements is less than or equal to the calcualted specification of "
+               " replicated measurements is less than or equal to the calculated specification of "
                  
                  , tags$span(style="color:red",  p4(d) ) ,
                  
@@ -867,9 +1074,9 @@ server <- shinyServer(function(input, output   ) {
                
                br(), br(),  
                
-               "We can also check the analytic solution using simulation "
-               , tags$span(style="color:red",  p4( dis) ) ,
-               " with "
+               "We can also check the analytic derived specification of "
+                , tags$span(style="color:red",  p4( dis) ) ,
+              " using simulation, with "
                , tags$span(style="color:red",  (n) ) ," Monte Carlo simulations",
                
                # br(), br(),  
