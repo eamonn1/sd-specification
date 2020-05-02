@@ -395,37 +395,39 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                    # 
                                    
                                    
+                                   
+                                   
+                                  # withMathJax(),
+                                   # section below allows in-line LaTeX via $ in mathjax.
+                                   #tags$div(HTML("")),
+                                   #helpText('An irrational number $\sqrt{2}$ and a fraction $1-\frac{1}{2}$'),
+                                   
+                                   
+                                  #$$\\frac{{ {\\chi^2}_{(n - 1)}}} {\\sigma^2}  \\!$$ degrees of freedom (n being the number of replicate measurements)
+                                   
                                    # h4("xxxxxxxxxxxxxxxxxx.")
                                    tags$span(style="color:black",
-                                   HTML(" <strong>When the between variance component is estimated to be negative we apply the following adjustments.</strong>")),
-                                   
-                                   tags$span(style="color:black",     
-                                   p("Since three batches is not sufficient to reliably estimate the between batch component, the total
-                                        variances are estimated as the between canister variance of the 'super-batch' consisting of the three
-                                        batches combined [2]. It is not uncommon that the mean square between (MSB) is less than the mean square within (MSW) with a one way ANOVA. This results in a negative estimate 
-                                        for the between variance component. 
-                             Thus concluding there is no additional variability due to the between variance component. In such cases the FDA PBE equations are adjusted. 
-                             We have",HTML(" <em>m</em>"),"replicates, 
-                             ",HTML(" <em>n</em>")," items per batch and",HTML(" <em>l</em>"),"is the no batches per product (test and reference). Refer to the FDA guidance document.")
-                                   ),
+                                   HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance $$\\sigma^2$$</strong>")),
+
                                    br(),
-                                   
-                                  #, tags$span(style="color:red",  p4( dis) ) ,
-                                  tags$span(style="color:black",
-                                   HTML(" <strong>Impact to the total variances</strong>")),
-                                  
-                                   
-                                   withMathJax(
-                                     helpText(  tags$span(style="color:black",'
-                           $${{\\sigma_R = }{\\sqrt{\\frac{MSB_R}{m} + \\frac{(m-1)MSW_R}{m}}}}\\!$$'))),   
-                                   
-                                   
+
                                    withMathJax(
                                     
                                      helpText(
                                        tags$span(style="color:black",
-                                     'This is equal to $${{}\\sigma_R ={\\sqrt{\\frac{MSB_R-MSW_R}{m} + MSW_R}}}\\!$$ In the event that $$MSB_R < MSW_R$$then $$MSB_R - MSW_R < 0$$and 
-                                         therefore $$\\sigma_R <  {\\sqrt{MSW_R}}$$
+                                     'It is well known that 
+                                     
+                                     $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\!$$ 
+                                     
+                                     is distributed as a 
+                                     
+                                     $$\\ {{ {\\chi^2}_{(n - 1)}}}    \\!$$ with n-1 degrees of freedom (n being the number of replicate measurements)
+                                     
+                                     and 
+                                         therefore 
+                                         
+                                         $$\\sigma_R <  {\\sqrt{MSW_R}}$$
+                                         
                               This means the total variance is less than the within variance component which cannot be.
                                                   If this is encountered the total variance is set equal to the within variance component. 
                                                   For either or both reference or test product if necessary. This is the first change from the guidance.'))),
