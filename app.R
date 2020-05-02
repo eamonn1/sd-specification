@@ -430,11 +430,7 @@ withMathJax(
                                    
                                    # h4("xxxxxxxxxxxxxxxxxx.")
                                    tags$span(style="color:black",
-<<<<<<< HEAD
                                    HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance sigma squared")),
-=======
-                                   HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance $$\\sigma^2$$</strong>")),
->>>>>>> 364ea631d25edfe4c404af16ea509c0fb7f6a50d
 
                                    br(),
 
@@ -442,157 +438,9 @@ withMathJax(
                                     
                                      helpText(
                                        tags$span(style="color:black",
-<<<<<<< HEAD
                                      'It is well known, with n being the number of replicate measurements, that 
                                      
                                      $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\sim {\\chi^2}_{(n - 1)}  \\qquad  \\qquad \\qquad  \\qquad \\left[ 1 \\right]  \\!$$ 
-=======
-                                     'It is well known that 
-                                     
-                                     $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\!$$ 
-                                     
-                                     is distributed as a 
-                                     
-                                     $$\\ {{ {\\chi^2}_{(n - 1)}}}    \\!$$ with n-1 degrees of freedom (n being the number of replicate measurements)
-                                     
-                                     and 
-                                         therefore 
-                                         
-                                         $$\\sigma_R <  {\\sqrt{MSW_R}}$$
-                                         
-                              This means the total variance is less than the within variance component which cannot be.
-                                                  If this is encountered the total variance is set equal to the within variance component. 
-                                                  For either or both reference or test product if necessary. This is the first change from the guidance.'))),
-                                   
-                                   withMathJax(
-                                     helpText('Therefore if $$MSB_R < MSW_R$$ then')),
-                                   
-                                   
-                                   
-                                   withMathJax(
-                                     helpText(" $$\\sigma_R =  {\\sqrt{MSW_R}}$$")),
-                                   
-                                   withMathJax(
-                                     helpText('and if $$MSB_T < MSW_T$$ then')),
-                                   
-                                   
-                                   withMathJax(
-                                     helpText(" $$\\sigma_T =  {\\sqrt{MSW_T}}$$")),
-                                   
-                                   
-                                   HTML(" <strong>Impact to Delta and HD</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText('$$ \\hat{\\Delta} = \\bar{y}_T - \\bar{y}_R$$')),
-                                   
-                                   br(),
-                                   
-                                   withMathJax(
-                                     helpText("We have")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_T) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_T}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_T.l_T-1$$")),
-                                   br(),
-                                   withMathJax(
-                                     helpText("We have")),
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_R) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_R}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_R.l_R-1$$")),
-                                   
-                                   withMathJax(
-                                     helpText("The variances of the difference is equal to the sum of the variances, so")),
-                                   
-                                   withMathJax(
-                                     helpText('$$ Var\\hat{\\Delta} =  \\frac{MSB_T}{n.l.m} +  \\frac{MSB_R}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$(n_R.l_R-1) + (n_T.l_T-1) = (n_R.l_R + n_T.l_T-2)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("When there is no between variance component for either test or reference then:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_T) =  \\frac{MSW_T}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_T.l_T.(m-1)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("and")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_R) =  \\frac{MSW_R}{n.l.m} $$')),                                    
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_R.l_R.(m-1)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("and so depending on if one or both products has a single variance component, there are four scenarios for the calculation of HD including the one in the guidance:")),
-                                   
-                                   withMathJax(
-                                     helpText("I) Both have non negative variance components:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T-1 + n_R.l_R-1)}  
-                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("II) Both have negative variance components:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R.(m-1)}  
-                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("III) Test only has negative variance component:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R-1)}  
-                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("IV) Reference only has negative variance component:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                         t_{1-\\alpha,n_T.l_T-1  + n_R.l_R.(m-1)}  
-                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E1 and E2</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_T >= MSW_T$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E1 + E2 = \\frac{MSB_T}{m} + \\frac{(m-1) MSW_T }{m } = \\frac{MSB_T - MSW_T }{m}  +  MSW_T = \\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}$$ 
-                                                 which is the total variance of test products. 
-                                                 If we encounter a negative between variance component for the test product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E1 = 0, E2 = MSW_T$$ and H2 and U2 are unaltered.")), 
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E3s and E4s, reference scaling</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_ r >= MSW_R$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E3s + E4s = -(1+\\theta_p)\\frac{MSB_R}{m} -(1+\\theta_p) \\frac{(m-1) MSW_R }{m } = -(1+\\theta_p)\\left(\\frac{MSB_R - MSW_R }{m}  +
-                                        MSW_R\\right) = -(1+\\theta_p)\\left(\\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}\\right)$$ 
-                                        
-                                                 If we encounter a negative between variance component for the reference product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E3s = 0, E4s = -(1+\\theta_p)MSW_R$$ and H4s and U4s are unaltered.")), 
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E3c and E4c, constant scaling</strong>"),
->>>>>>> 364ea631d25edfe4c404af16ea509c0fb7f6a50d
                                    
                                      recall
                                          
@@ -1149,7 +997,7 @@ server <- shinyServer(function(input, output   ) {
     d <- spec()$spec.
     
     HTML(paste0( 
-                 "We can state if the standard deviation of the "
+                 "We can therefore state if the standard deviation of the "
                  , tags$span(style="color:red",  p0(ctr) ) ,
                  " replicated measurements is less than or equal to the calculated specification of "
                  
