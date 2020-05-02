@@ -76,7 +76,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                   direction = "bottom"
                 ),
                 
-                h2("A specification for repeatability"), 
+                h2("Inference about a Population Variance"), 
                 
                 h4("  "), 
                 
@@ -109,18 +109,18 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                     tags$style(HTML('#resample{background-color:orange}'))
                                   ),
                                   
-                                  textInput('n', 
+                                  textInput('sims', 
                                             div(h5(tags$span(style="color:blue", "Number of Monte Carlo simulations"))), "1e5"),
                                   
                                   tags$hr(),
-                                  textInput('dist', 
+                                  textInput('popsd', 
                                             div(h5(tags$span(style="color:blue", "Population standard deviation"))), "3.7"),
                                   
-                                  textInput('levels', 
+                                  textInput('reps', 
                                             div(h5(tags$span(style="color:blue", "Number of replicates to evaluate"))), "5"),
                                   tags$hr(), 
-                                  textInput('or1', 
-                                            div(h5(tags$span(style="color:blue", "alpha level"))), ".000003"),
+                                  textInput('alpha', 
+                                            div(h5(tags$span(style="color:blue", "alpha level"))), "0.000003"),
                                   
                                   
                                 #  textInput('or2', 
@@ -190,7 +190,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                            ))),
 
 h4(htmlOutput("textWithNumber",) ),
-                                       h4(paste("Using the following")), 
+                                       h4(paste("Using the following to calculate the specification")), 
 
 
 withMathJax(
@@ -208,7 +208,7 @@ withMathJax(
                                       h4(htmlOutput("textWithNumber2",) ),
 
                                        div(plotOutput("his",  width=fig.width7, height=fig.height7)),
-
+                                             div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
 
 
 
@@ -430,11 +430,7 @@ withMathJax(
                                    
                                    # h4("xxxxxxxxxxxxxxxxxx.")
                                    tags$span(style="color:black",
-<<<<<<< HEAD
                                    HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance sigma squared")),
-=======
-                                   HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance $$\\sigma^2$$</strong>")),
->>>>>>> 364ea631d25edfe4c404af16ea509c0fb7f6a50d
 
                                    br(),
 
@@ -442,182 +438,35 @@ withMathJax(
                                     
                                      helpText(
                                        tags$span(style="color:black",
-<<<<<<< HEAD
                                      'It is well known, with n being the number of replicate measurements, that 
                                      
                                      $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\sim {\\chi^2}_{(n - 1)}  \\qquad  \\qquad \\qquad  \\qquad \\left[ 1 \\right]  \\!$$ 
-=======
-                                     'It is well known that 
-                                     
-                                     $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\!$$ 
-                                     
-                                     is distributed as a 
-                                     
-                                     $$\\ {{ {\\chi^2}_{(n - 1)}}}    \\!$$ with n-1 degrees of freedom (n being the number of replicate measurements)
-                                     
-                                     and 
-                                         therefore 
-                                         
-                                         $$\\sigma_R <  {\\sqrt{MSW_R}}$$
-                                         
-                              This means the total variance is less than the within variance component which cannot be.
-                                                  If this is encountered the total variance is set equal to the within variance component. 
-                                                  For either or both reference or test product if necessary. This is the first change from the guidance.'))),
-                                   
-                                   withMathJax(
-                                     helpText('Therefore if $$MSB_R < MSW_R$$ then')),
-                                   
-                                   
-                                   
-                                   withMathJax(
-                                     helpText(" $$\\sigma_R =  {\\sqrt{MSW_R}}$$")),
-                                   
-                                   withMathJax(
-                                     helpText('and if $$MSB_T < MSW_T$$ then')),
-                                   
-                                   
-                                   withMathJax(
-                                     helpText(" $$\\sigma_T =  {\\sqrt{MSW_T}}$$")),
-                                   
-                                   
-                                   HTML(" <strong>Impact to Delta and HD</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText('$$ \\hat{\\Delta} = \\bar{y}_T - \\bar{y}_R$$')),
-                                   
-                                   br(),
-                                   
-                                   withMathJax(
-                                     helpText("We have")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_T) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_T}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_T.l_T-1$$")),
-                                   br(),
-                                   withMathJax(
-                                     helpText("We have")),
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_R) = \\frac{\\sigma^2_B}{n.l}  +  \\frac{\\sigma^2_W}{n.l.m}  = \\frac{m\\sigma^2_B + \\sigma^2_W}{n.l.m} = \\frac{MSB_R}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_R.l_R-1$$")),
-                                   
-                                   withMathJax(
-                                     helpText("The variances of the difference is equal to the sum of the variances, so")),
-                                   
-                                   withMathJax(
-                                     helpText('$$ Var\\hat{\\Delta} =  \\frac{MSB_T}{n.l.m} +  \\frac{MSB_R}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$(n_R.l_R-1) + (n_T.l_T-1) = (n_R.l_R + n_T.l_T-2)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("When there is no between variance component for either test or reference then:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_T) =  \\frac{MSW_T}{n.l.m} $$')),
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_T.l_T.(m-1)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("and")),
-                                   
-                                   withMathJax(
-                                     helpText('$$Var(\\bar{y}_R) =  \\frac{MSW_R}{n.l.m} $$')),                                    
-                                   
-                                   withMathJax(
-                                     helpText("with degrees of freedom $$n_R.l_R.(m-1)$$")),
-                                   
-                                   withMathJax(
-                                     helpText("and so depending on if one or both products has a single variance component, there are four scenarios for the calculation of HD including the one in the guidance:")),
-                                   
-                                   withMathJax(
-                                     helpText("I) Both have non negative variance components:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T-1 + n_R.l_R-1)}  
-                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("II) Both have negative variance components:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R.(m-1)}  
-                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("III) Test only has negative variance component:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                        t_{1-\\alpha,n_T.l_T.(m-1) + n_R.l_R-1)}  
-                                          (\\frac{MSW_T}{n.l.m} + \\frac{MSB_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   withMathJax(
-                                     helpText("IV) Reference only has negative variance component:")),
-                                   
-                                   withMathJax(
-                                     helpText('$$H_D = \\left(\\lvert\\hat{\\Delta}\\rvert + 
-                                         t_{1-\\alpha,n_T.l_T-1  + n_R.l_R.(m-1)}  
-                                          (\\frac{MSB_T}{n.l.m} + \\frac{MSW_R}{n.l.m})^.5\\right)^2  $$')),
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E1 and E2</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_T >= MSW_T$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E1 + E2 = \\frac{MSB_T}{m} + \\frac{(m-1) MSW_T }{m } = \\frac{MSB_T - MSW_T }{m}  +  MSW_T = \\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}$$ 
-                                                 which is the total variance of test products. 
-                                                 If we encounter a negative between variance component for the test product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E1 = 0, E2 = MSW_T$$ and H2 and U2 are unaltered.")), 
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E3s and E4s, reference scaling</strong>"),
-                                   
-                                   withMathJax(
-                                     helpText("When $$MSB_ r >= MSW_R$$ we have")),
-                                   
-                                   withMathJax(
-                                     helpText("$$E3s + E4s = -(1+\\theta_p)\\frac{MSB_R}{m} -(1+\\theta_p) \\frac{(m-1) MSW_R }{m } = -(1+\\theta_p)\\left(\\frac{MSB_R - MSW_R }{m}  +
-                                        MSW_R\\right) = -(1+\\theta_p)\\left(\\hat{\\sigma^2_B} + \\hat{\\sigma^2_W}\\right)$$ 
-                                        
-                                                 If we encounter a negative between variance component for the reference product we have shown above the total variance is estimated by the mean squares within. 
-                                                 
-                                                 So let $$E3s = 0, E4s = -(1+\\theta_p)MSW_R$$ and H4s and U4s are unaltered.")), 
-                                   
-                                   HTML(" <strong>Impact on FDA parameters E3c and E4c, constant scaling</strong>"),
->>>>>>> 364ea631d25edfe4c404af16ea509c0fb7f6a50d
                                    
                                      recall
                                          
                                      $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {(n-1)}  =  {\\it{s}^2}\\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 2 \\right]  \\!$$
-                                         
+                                           
+                                    we can see
+                                     
+                                     $${{ {\\sum_i} (X_i - \\bar{X})^2}} = {\\it{s}^2} {(n-1)} \\qquad \\qquad \\qquad \\qquad \\left[3 \\right]  \\!$$ 
                                      hence
                                      
-                                     $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 3 \\right]  \\!$$ 
+                                     $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 4 \\right]  \\!$$ 
                                      
-                                     as a side note we can see
+                                   
                                      
-                                     $${{ {\\sum_i} (X_i - \\bar{X})^2}} =  {\\it{s}^2} {(n-1)} \\qquad \\qquad \\qquad \\qquad \\left[4 \\right]  \\!$$ 
-                                     
-                                     now we can calculate a specification when we know the true population variance...
+                                     now we can calculate any quantile of the true population variance (for any sample size n)...
                                      
                                      $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
                                      
-                                    so if we have a reliable estimate of the population variance, 
+                                    So if we have a reliable estimate of the population variance, 
                                     we can calculate a specification say 95% confidence (50000 in a million) or 99.9997% (3 in a million) to see if the sample replicate variation
                                     is consistent with the population variance. A specification such as 3 in a million is useful for example in the diagnostic industry,
-                                    where huge numbers of replicates are run in the field, during testing and analytical studies for example.
+                                    where huge numbers of replicates are run in the field and during analytical studies for example.
                                      
-                                     br(),
-                                     
-                                     now if we want to calculate a confidence interval for the population variance.  
+
+$$ $$
+                                     Now if we want to calculate a confidence interval for the population variance, based on the standard deviation from a sample  
                                      
                                      $$ {  P\\left[ {(\\chi^2}_{(n - 1), (\\alpha/2)})   \\le {     {\\chi^2}_{(n - 1)} \\le \ {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }     \\right] =   1-\\alpha}  \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 6 \\right]  \\!$$  
                                      
@@ -706,23 +555,23 @@ server <- shinyServer(function(input, output   ) {
     
     foo <- input$resample
     
-    dis <- as.numeric(unlist(strsplit(input$dist,",")))
-    
-    n <- as.numeric(unlist(strsplit(input$n,",")))
-    
-    ctr <- as.numeric(unlist(strsplit(input$levels,",")))
-    
-     or1<- as.numeric(unlist(strsplit(input$or1,",")))
+    popsd <- as.numeric(unlist(strsplit(input$popsd,",")))
+    sims <- as.numeric(unlist(strsplit(input$sims,",")))
+    reps <- as.numeric(unlist(strsplit(input$reps,",")))
+    alpha<- as.numeric(unlist(strsplit(input$alpha,",")))
      
     return(list(  
-      n=n[1],       # Number of simulation
-      lev=ctr[1],   # replicates
-      or1=or1[1],   # alpha
-      shape1=dis[1] # sd
+      sims=sims[1],       # Number of simulation
+      reps=reps[1],   # replicates
+      alpha=alpha[1],   # alpha
+      popsd=popsd[1] # sd
      
     ))
     
   })
+  
+  
+ 
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # tab 1 simulate po model data and analyse
@@ -731,14 +580,18 @@ server <- shinyServer(function(input, output   ) {
     
     sample <- random.sample()
     
-    n.    <-   sample$n
-    reps. <-   sample$lev
-    alpha.  <- sample$or1
-    sd.  <-    sample$shape1
+    sims.    <-   sample$sims
+    reps. <-      sample$reps
+    alpha.  <-    sample$alpha
+    popsd.  <-    sample$popsd
  
-    spec. <- sd.spec(input.sd=sd., alph=alpha., n=reps.)  
+    spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)  
     
-    return(list( n.=n., reps.=reps., alpha.=alpha., sd.=sd. , spec.=spec.)) 
+    x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
+    
+    sim. <- quantile(x1, c(1-alpha.))   # simulation spec one sided
+    
+    return(list( sims.=sims., reps.=reps., alpha.=alpha., popsd.=popsd. , spec.=spec., x1=x1, sim.=sim.)) 
   })
    
   
@@ -751,26 +604,13 @@ server <- shinyServer(function(input, output   ) {
   })
   
   
-  sim <- reactive({
-    
-    sample <- random.sample()
-    
-    n.    <-   sample$n
-    reps. <-   sample$lev
-    alpha.  <- sample$or1
-    sd.  <-    sample$shape1
-    
-    x <- replicate(n., sd(rnorm( reps.,0, sd.)) )
-    sim. <- quantile(x, c(1-alpha.))
-
-    return(list( x=x, sim.=sim., n.=n.)) 
-  })
+ #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$dat1 <- renderPrint({
     
-    d <- sim()$sim.
+    sim <- spec()$sim.
     
-    return(print(d, digits=4))
+    return(print(sim, digits=4))
   })
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -782,39 +622,51 @@ server <- shinyServer(function(input, output   ) {
     
     sample <- random.sample()
     
-    d <-  sim()$x
-    n <-  sample$n
+    dx <-  spec()$x1
     sp <- spec()$spec.
     
-    reps. <-   sample$lev
-    dfx <- reps. -1
-    
-    
-    popsd <- as.numeric(unlist(strsplit(input$dist,",")))
-    n <- as.numeric(unlist(strsplit(input$n,",")))
-    
-    
-    h <-  hist(d, breaks=n/10, xlab="SD", 
-    main=paste("Distribution of",n, "SDs drawn from a population SD of",popsd,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
+    reps. <-   sample$reps
+    popsd.<-   sample$popsd
+    sims. <-   sample$sims
+
+    h <-  hist(dx, breaks=1000, xlab="SD", 
+    main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a population SD of",popsd.,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
     abline(v = sp, col = "blue", lwd = 2, lty=2)
 
-    xfit <- seq(min(d)-.5, max(d)+1, length = 40)
+    })
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+  output$his2 <- renderPlot({
     
-    yfit <- dchisq(xfit, df = dfx)
+    sample <- random.sample()
+     
+    dx <-  spec()$x1
+    sp <- spec()$spec.
     
-    yfit <- yfit * diff(h$mids[1:2]) *  n #length(d)
+    sims.   <-   sample$sims
+    reps.   <-   sample$reps
+    alpha.  <-   sample$alpha
+    popsd.  <-   sample$popsd
+    df      <-   reps. -1
+ 
+     z <- (dx^2)*(df)/(popsd.^2) ## this is chi square distributed.  
+
+    h <-  hist(z, breaks=1000, xlab="SD", prob=TRUE,
+               main=paste("Distribution of", sims., "SDs each of sample size",
+                          reps.,"drawn from a population SD of",popsd.,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
+    abline(v = sp, col = "blue", lwd = 2, lty=2)
+   
+    curve( dchisq(x, df=df) , col='green', add=TRUE)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    lines(xfit, yfit, col = "black", lwd = 2)
+ 
     
     
-    
-    
+  
+     
+   
   })
-  
-  
-  
-  
-  
   
   
   
@@ -1097,18 +949,40 @@ server <- shinyServer(function(input, output   ) {
   output$textWithNumber <- renderText({ 
     
     
-    dis <- as.numeric(unlist(strsplit(input$dist,",")))
-    n <- as.numeric(unlist(strsplit(input$n,",")))
-    ctr <- as.numeric(unlist(strsplit(input$levels,",")))
-    or1<- as.numeric(unlist(strsplit(input$or1,",")))
+    dis <- as.numeric(unlist(strsplit(input$popsd,",")))
+    n <- as.numeric(unlist(strsplit(input$sims,",")))
+    ctr <- as.numeric(unlist(strsplit(input$reps,",")))
+    or1<- as.numeric(unlist(strsplit(input$alpha,",")))
     
-   d1 <- sim()$sim.
+   d1 <- spec()$sim.
     d <- spec()$spec.
     
+    
+    # sample <- random.sample()
+    # 
+    # d <-  sim()$x
+    # 
+    # sp <- spec()$spec.
+    # 
+    # sims.    <-    sample$sims
+    # reps. <-      sample$reps
+    # alpha.  <-    sample$alpha
+    # popsd.  <-    sample$popsd
+    # 
+    # 
+    # df <- reps. -1
+    
+    
+    
+    
+    
+    
+    
+    
     HTML(paste0( "With a population standard deviation of "
-                 , tags$span(style="color:red",  p4( dis) ) ,
+                 , tags$span(style="color:pink",  p4( dis) ) ,
                  " from a reliable source we will evaluate  "
-                 , tags$span(style="color:red",  p0(ctr) ) ," replicates.",
+                 , tags$span(style="color:pink",  p0(ctr) ) ," replicates.",
                  
                  br(), br(),  
                   
@@ -1116,15 +990,18 @@ server <- shinyServer(function(input, output   ) {
                 #  tags$span(style="color:red",  p4(ctr) ) , 
             
                  " We have set the one sided alpha level to "
-                 , tags$span(style="color:red",  p8(or1) ) ,
+                 , tags$span(style="color:pink",  p8(or1) ) ,
                 ". This is equivalent to a upper confidence limit of ",
-                tags$span(style="color:red",  p5(100*(1-or1)) ) , 
-                tags$span(style="color:red",   "%. " ) , 
+                tags$span(style="color:pink",  p5(100*(1-or1)) ) , 
+                tags$span(style="color:pink",   "%. " ) , 
                 
                 "This means we are prepared to accept  "
-                 , tags$span(style="color:red",  p0(or1*1e6) ) ,
-                 " out of specification results in 1 million evaluations when in truth the " 
-                , tags$span(style="color:red",  p0(ctr) ) ," replicates are from the stated population. "
+                 , tags$span(style="color:pink",  p0(or1*1e6) ) ,
+                 " out of specification results if we were to perform 1 million evaluations 
+                using "
+                 , tags$span(style="color:pink",  p0(ctr) ) ," replicates ",
+                 " when in truth every sample of " 
+                , tags$span(style="color:pink",  p0(ctr) ) ," replicates are from the stated population. "
                 
 
            
@@ -1140,20 +1017,22 @@ server <- shinyServer(function(input, output   ) {
   output$textWithNumber2 <- renderText({ 
     
     
-    dis <- as.numeric(unlist(strsplit(input$dist,",")))
-    n <- as.numeric(unlist(strsplit(input$n,",")))
-    ctr <- as.numeric(unlist(strsplit(input$levels,",")))
-    or1<- as.numeric(unlist(strsplit(input$or1,",")))
     
-    d1 <- sim()$sim.
+    dis <- as.numeric(unlist(strsplit(input$popsd,",")))
+    n <- as.numeric(unlist(strsplit(input$sims,",")))
+    ctr <- as.numeric(unlist(strsplit(input$reps,",")))
+    or1<- as.numeric(unlist(strsplit(input$alpha,",")))
+    
+ 
+    d1 <- spec()$sim.
     d <- spec()$spec.
     
     HTML(paste0( 
-                 "We can state if the standard deviation of the "
-                 , tags$span(style="color:red",  p0(ctr) ) ,
+                 "We can therefore state if the standard deviation of the "
+                 , tags$span(style="color:pink",  p0(ctr) ) ,
                  " replicated measurements is less than or equal to the calculated specification of "
                  
-                 , tags$span(style="color:red",  p4(d) ) ,
+                 , tags$span(style="color:pink",  p4(d) ) ,
                  
                  " the error is considered consistent with the established test method error.",
                  
@@ -1161,9 +1040,9 @@ server <- shinyServer(function(input, output   ) {
                  br(), br(),  
                  
                  "We can also check the analytic derived specification of "
-                 , tags$span(style="color:red",  p4( dis) ) ,
+                 , tags$span(style="color:pink",  p4( d) ) ,
                  " using simulation, with "
-                 , tags$span(style="color:red",  (n) ) ," Monte Carlo simulations",
+                 , tags$span(style="color:pink",  (n) ) ," Monte Carlo simulations",
                  
                  # br(), br(),  
                  
@@ -1171,7 +1050,7 @@ server <- shinyServer(function(input, output   ) {
                  #  tags$span(style="color:red",  p4(ctr) ) , 
                  
                  " we estimate the specification as "
-                 , tags$span(style="color:red",  p4(d1) ) ,"."
+                 , tags$span(style="color:pink",  p4(d1) ) ,"."
                  
                  
                  
