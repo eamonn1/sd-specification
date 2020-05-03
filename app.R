@@ -664,7 +664,7 @@ $$ $$
 server <- shinyServer(function(input, output   ) {
   
   shinyalert("Welcome! \nInference concerning a population variance!",
-             "...the standard deviaiton of a standard deviation...what?", 
+             "...the standard deviaiton of a standard deviation...", 
              type = "info")
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
