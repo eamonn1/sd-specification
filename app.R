@@ -122,28 +122,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                   tags$hr(), 
                                   textInput('alpha', 
                                             div(h5(tags$span(style="color:blue", "Alpha level"))), "0.000003"),
-                                  
-                                  
-                                #  textInput('or2', 
-                                      #      div(h5(tags$span(style="color:blue", "xxxxxxxxxxxxxxxxxxxxx"))), "1"),
-                                  
-                                  #  textInput('n2y2', 
-                                  # #      div(h5("Enter the true correlation (tab 2)")), ".8"),
-                                  # div(h5(tags$span(style="color:blue", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"))), "0.8"),
-                                  # tags$hr(),
-                                  
-                                  # div(h5("References:")),  
-                                  # tags$a(href = "https://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29", tags$span(style="color:blue", "[1] PRO"),),   
-                                  # div(p(" ")),
-                                  # tags$a(href = "https://projecteuclid.org/download/pdf_1/euclid.aos/1176345338",  tags$span(style="color:blue", "[2] PO"),),   
-                                  # div(p(" ")),
-                                  # tags$a(href = "https://projecteuclid.org/download/pdf_1/euclid.aos/1176344552", tags$span(style="color:blue", "[3] Krushke"),),
-                                  # div(p(" ")),
-                                  # tags$a(href = "https://blogs.sas.com/content/iml/2017/09/20/fishers-transformation-correlation.html", tags$span(style="color:blue", "[4] xxxxxx"),),  
-                                  # div(p(" ")),
-                                  # tags$a(href = "https://rdrr.io/cran/rms/man/predict.lrm.html", tags$span(style="color:blue", "prediction of model mean"),),  
-                                  # div(p(" ")),
-                                  # tags$hr()
+                         
                                 
                                 
                                 tags$hr(),
@@ -151,18 +130,6 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 tags$a(href = "https://www.amazon.com/Statistical-Evaluation-Measurement-Errors-Reliability/dp/0340760702", tags$span(style="color:blue", "[1] Graham Dunn (2nd edition section 2.6.1 page 35"),),   
                                 div(p(" ")),
                                 tags$a(href = "https://www.wiley.com/en-us/Biostatistics%3A+A+Methodology+For+the+Health+Sciences%2C+2nd+Edition-p-9780471031857",  tags$span(style="color:blue", "[2] Biostatisics A Methodology for the Health Sciences, 2nd Ed. page 96"),),   
-                                div(p(" ")),
-                                #  tags$a(href = "https://projecteuclid.org/download/pdf_1/euclid.aos/1176344552", tags$span(style="color:blue", "[3] Krushke"),),
-                                #  div(p(" ")),
-                                # tags$a(href = "http://hbiostat.org/doc/rms.pdf", tags$span(style="color:blue", "[3] Regression modelling strategies"),),  
-                                # div(p(" ")),
-                                # tags$a(href = "https://rdrr.io/cran/rms/man/predict.lrm.html", tags$span(style="color:blue", "[4] Prediction of model mean"),),  
-                                # div(p(" ")),
-                                # tags$a(href = "https://psyarxiv.com/x8swp/", tags$span(style="color:blue", "[5] Ordinal Regression Models in Psychology: A Tutorial"),),  
-                                # div(p(" ")),
-#                                 tags$a(href = "
-# https://stats.stackexchange.com/questions/89474/interpretation-of-ordinal-logistic-regression#89485
-# ", tags$span(style="color:blue", "[6] Stackexchange"),),  
                                 div(p(" ")),
                                 tags$hr(),
                                 
@@ -196,11 +163,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                               
                               
                               tabPanel("1 Distribution of population variance", value=7, 
-                                   #    h4("If the standard deviation of the two replicated measurements is less than or equal to the stated specification, the error is considered consistent with the established test method error. 
-#The baseline input required is a repeatability sd from a reliable source i.e. a precision study"),
-                                      
-              
-
+          
                                        h4(htmlOutput("textWithNumber",) ),
                                        h4(paste("Plugging in alpha, the population variance and the number of replicates (n) into equation [5] we calculate the specification.")), 
 
@@ -209,53 +172,30 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
   
                                       helpText(
                                            tags$span(style="color:black",
-              ' 
-              
-                            $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
+              ' $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
 
               
                              
                             
               '))),
 
-h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below right.")), 
+              h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below right.")), 
 
 
-withMathJax(
-helpText(
-  tags$span(style="color:black",
+                  withMathJax(
+                      helpText(
+                               tags$span(style="color:black",
             ' 
-              
-                         
-              
-                            $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 4 \\right]  \\!$$ 
+               $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 4 \\right]  \\!$$ 
                             
               '))),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
  
                                       h4(htmlOutput("textWithNumber2",) ),
 
-                                          #  div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
-
-
+ 
 
 fluidRow(
   column(width = 6, offset = 0, style='padding:1px;',
@@ -272,17 +212,6 @@ fluidRow(
 
 
 
-
-
-
-
-
-
-
-
-
-
- 
                               ) ,
                               
                               tabPanel("2 A single simulation ", value=3, 
@@ -292,7 +221,6 @@ fluidRow(
                                        fluidRow(
                                          column(width = 6, offset = 0, style='padding:1px;',
                                                 
-                                                # div(plotOutput("reg.plot99", width=fig.width1, height=fig.height1)),
                                                 h4("A single sample of replicates (from the the population SD data generating mechanism)"), 
                                                 div( verbatimTextOutput("sample")),
                                                 h4("The standard deviation of the replicates"), 
@@ -328,246 +256,11 @@ fluidRow(
                                        
                                        
                               )),
-
-
- 
-
-
-
-
-
-
-
-
-
-                              
-                              # tabPanel("3 xxxxx", value=7, 
-                              #  
-                              #          fluidRow(
-                              #            column(width = 6, offset = 0, style='padding:1px;',
-                              #                   h4("Table 1 Proportional odds model"), 
-                              #                 
-                              #            ) ,
-                              #            
-                              #    
-                              #            
-                              #            h4("Table 2 xxxxx"),
-                              #            fluidRow(
-                              #              column(width = 6, offset = 0, style='padding:1px;',
-                              # 
-                              #                    splitLayout(
-                              #                     textInput("bas1", div(h5("Enter a baseline low effect")), value="1", width=100),
-                              #                      textInput("bas2", div(h5("Enter a baseline high effect")),value="2", width=100)
-                              #                    ),
-                              # 
-                              #                    
-                              #                   #  div( verbatimTextOutput("reg.summary3")),
-                              # 
-                              #                 
-                              #              ))),
-                              #           
-                            #  ) ,
-                              
-                             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                              #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                              #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-             
-#                               tabPanel("4 xxxx", value=3, 
-#                                        
-#                                        h5(paste("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")), 
-#                                        textInput('rcat2', 
-#                                                  div(h5(tags$span(style="color:blue",
-#                                                                   ))), "999"),
-#                                        
-#                                        
-#                                       # div(plotOutput("preds2", width=fig.width1, height=fig.height3)),
-#                                        
-#                                        
-#                                        
-#                                        fluidRow(
-#                                          column(width = 7, offset = 0, style='padding:1px;',
-#                                                 h4(paste("Figure 4. xxxxxxxxxxxxxxxxxxxxxx")), 
-#                                                  
-#                                          )),
-#                               ),
-#                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#                               tabPanel("5 xxxx", 
-#                                        h4(paste("Figure 5 & 6. xxxxxxxxxxxxxxxxxxx")),
-#                                         
-#                                        h4("xxxxxxxxxxxxxxxxxxxxx
-# "),
-#                                        fluidRow(
-#                                          column(width = 6, offset = 0, style='padding:1px;',
-#                                                 
-#                                            #     div(plotOutput("preds", width=fig.width7, height=fig.height3)),
-#                                                 
-#                                                 fluidRow(
-#                                                   
-#                                                   textInput('base', 
-#                                                             div(h5(tags$span(style="color:blue", 
-#                                                                              "xxxxxxxxxxxxxxxxx"))), "1")
-#                                                   
-#                                                   
-#                                                 ),
-#                                          ) ,
-#                                          
-#                                          fluidRow(
-#                                            
-#                                           
-#                                            column(width = 5, offset = 0, style='padding:1px;',
-#                                                  
-#                                                  # div(plotOutput("predicts", width=fig.width7, height=fig.height3)),
-#                                                   
-#                                                   fluidRow(
-#                                                     
-#                                                     textInput('group', 
-#                                                               div(h5(tags$span(style="color:blue", 
-#                                                                                "xxxxxxxxxxxxxxxxxxxxxx"))), "1"),
-#                                                     
-#                                                     textInput('rcat', 
-#                                                               div(h5(tags$span(style="color:blue", 
-#                                                                                "xxxxxxxxxxxxxxxxxxxxxxx"))), "999"),
-# 
-#                                                   ),
-#                                                
-#                                            ))),
-#                                        
-#                                         
-#                                        width = 30 )     ,
-#                                #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#                               tabPanel("6 xxxx",
-#                                        h4(paste("Table 3 xxxxxxxxxxxxxxxxxxxxxxxxx")),
-#                                        fluidRow(
-#                                          column(width = 12, offset = 0, style='padding:1px;',
-#                                        
-#                                             # div( verbatimTextOutput("reg.summaryp") ),
-#                                              h4(paste("Table xxxxxxxxxxxxxxxxxxxx")),
-#                                            #  div( verbatimTextOutput("reg.summaryc") ),
-#                                          ) ,
-#                                     
-#                                          ),
-# 
-#                               ),
-#                               
-#                              tabPanel("7 xxxx", value=3, 
-#                                        h4(" xxxxxxxxxxxxxxxxxxxxxxxx"),
-#                                       
-#                                        
-#                                        fluidRow(
-#                                          column(width = 6, offset = 0, style='padding:1px;',
-#                                                 
-#                                              #   div( verbatimTextOutput("reg.summary4") )
-#                                          ) ,
-#                                         
-#                                          fluidRow(
-#                                            column(width = 5, offset = 0, style='padding:1px;',
-#                                                   
-#                                                  # div( verbatimTextOutput("reg.summary5")),
-#                                                   #div(plotOutput("predictl", width=fig.widthx, height=fig.heightx)),
-#                                               
-#                                            ))),
-#                                       h4("xxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-#                              ),
-#                                       
-#                                       tabPanel("8 xxxx", value=3, 
-#                                             
-#                                                fluidRow(
-#                                                  column(width = 6, offset = 0, style='padding:1px;',
-#                                                         h4("xxxxxxxxxxxxxxxxxxxx"),
-#                                                         textInput('kints',
-#                                                                   div(h5(tags$span(style="color:blue",
-#                                                                                    ""))), ""), 
-#                                                         
-#                                                        # div(plotOutput("PP.plot", width=fig.width7, height=fig.height6)),
-#                                                         h4("Figure 8 xxxxxxxxxxxxxxxxxxxxxxxxx"),
-#                                                         br() , 
-#                                                         
-#                                                         h4(""),
-#                                                         
-#                                                         h4("Table xxxxxxxxxxxxxxxxxxx"),
-#                                                        # div( verbatimTextOutput("predz"), width = 2), # 
-#                                   ),
-#                                                  
-#                                                  fluidRow(
-#                                                    
-#                                                   
-#                                                    h4("xxxxxxxxxxxxxxxxxx"),
-#                                                    h4("xxxxxxxxxxxxxxxxxxx"),
-#                                                    br(), br(), br() ,  
-#                                                    
-#                                                    
-#                                                    column(width = 5, offset = 0, style='padding:0px;',
-# 
-#                                                        #   div(plotOutput("PP.plot2", width=fig.width7, height=fig.height6)),
-#                                                           h4("Figure 9 xxxxxxxxxxxxxxxxxxxx"),
-#                                                            
-#                                                    )))
-#                                         
-#                               ) ,
-#    
-# 
-#                              tabPanel("9 xxxx", value=3, 
-#                                       
-#                                   #h5(paste("Checking assumptions")), 
-#                                   #div(plotOutput("assumption", width=fig.width1, height=fig.height3)),
-#                                   h4("Figure 10 xxxxxxxxxxxxxxxxxxxxxxx"),
-#                                   h4( "xxxxxxxxxxxxxxxxxxxxxxx" ),
-#                                   h4("Table 8 xxxxxxxxxxxxxxxxxxxxx"),
-#                                   div( verbatimTextOutput("assump")),  
-#                                 
-#                              ),
-#                              
+               
                              
                              tabPanel("3 Explanation", value=3, 
                                       
-                                      #div(plotOutput("ecdfs", width=fig.width1, height=fig.height3)),
-                                   #    h4("Figure 11 xxxxxxxxxxxxxxxxxxxxxxxxx"), 
-                                   #    h4("xxxxxxxxxxxxxxxxxxxxxxxx"), 
-                                   # # div(plotOutput("logitseries", width=fig.width1, height=fig.height3)),
-                                   #   
-                                   #    
-                                   # h4("Figure 12 xxxxxxxxxxxxxxxxxxxxxxxxxx"),  
-                                   # 
-                                   
-                                   
-                                   
-                                   
-                                  # withMathJax(),
-                                   # section below allows in-line LaTeX via $ in mathjax.
-                                   #tags$div(HTML("")),
-                                   #helpText('An irrational number $\sqrt{2}$ and a fraction $1-\frac{1}{2}$'),
-                                   
-                                   
-                                  #$$\\frac{{ {\\chi^2}_{(n - 1)}}} {\\sigma^2}  \\!$$ degrees of freedom (n being the number of replicate measurements)
-                                   
-                                   # h4("xxxxxxxxxxxxxxxxxx.")
+                           
                                    tags$span(style="color:black",
                                    HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance sigma squared")),
 
@@ -626,28 +319,9 @@ $$ $$
                                    br(),
                                    br()
                                
-                             )#,
+                             )
                               
-                             
-                             # tabPanel("11 xxxx", 
-                             #          
-                             #          fluidRow(
-                             #            column(width = 3, offset = 0, style='padding:1px;',
-                             #                   h4("Table 9 Data listing"),
-                             #                   #div( verbatimTextOutput("dat")),
-                             #            ),
-                             #            
-                             #            column(width = 9, offset = 0, style='padding:1px;',
-                             #                   h4("xxxxxxxxxxx"),
-                             #                   h4("xxxxxxxxxxxxxxxxx 
-                             #                      \n"),
-                             #                   
-                             #            )
-                             #            
-                             #            
-                             #          )
-                             # )##end
-                             
+              
                              
                              
                              
@@ -668,7 +342,7 @@ server <- shinyServer(function(input, output   ) {
              type = "info")
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # This is where a new sample is instigated , no alpha here
+  # This is where a new sample is instigated, no alpha here
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   random.sample <- reactive({
     
@@ -719,7 +393,6 @@ server <- shinyServer(function(input, output   ) {
     
   })
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
   # ci of pop from sample
   ci <- reactive({
  
@@ -787,6 +460,7 @@ server <- shinyServer(function(input, output   ) {
     
     return(print(d, digits=4))
   })
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$datx <- renderPrint({
     
@@ -795,6 +469,7 @@ server <- shinyServer(function(input, output   ) {
     return(print(d, digits=4))
   })
   
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$datxy <- renderPrint({
     
@@ -812,10 +487,9 @@ server <- shinyServer(function(input, output   ) {
   })
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # beta dist plot 
+  # plot 1
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
   
-
   output$his <- renderPlot({
     
     sample <- random.sample()
@@ -833,7 +507,9 @@ server <- shinyServer(function(input, output   ) {
 
     })
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # plot 2
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
   
   output$his2 <- renderPlot({
     
@@ -853,14 +529,14 @@ server <- shinyServer(function(input, output   ) {
     h <-  hist(z,   breaks="FD", xlab="Chi-square distribution", prob=TRUE,
                main=paste0("Blue dashed line is the chi-square distribution with d.f =", df, ", histogram created 
                using equation 4 pluging in the simulated squared SDs (seen left), \ndegrees of freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
-    #abline(v = sp, col = "blue", lwd = 2, lty=2)
-   
+
     curve( dchisq(x, df=df) , col='blue', add=TRUE, lty=2, lwd=3)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    
   })
   
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # text 1
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$textWithNumber <- renderText({ 
@@ -888,8 +564,8 @@ server <- shinyServer(function(input, output   ) {
                  , tags$span(style="color:purple",  p0(or1*1e6) ) ,
                  " out of specification results if we were to perform 1 million evaluations 
                 using "
-                 , tags$span(style="color:purple",  p0(ctr) ) ," replicates ",
-                 " when in truth every sample of " 
+                 , tags$span(style="color:purple",  p0(ctr) ) ," replicates",
+                 ", when in truth every sample of " 
                 , tags$span(style="color:purple",  p0(ctr) ) ," replicates are from the stated population. "
                 
           
@@ -897,7 +573,9 @@ server <- shinyServer(function(input, output   ) {
     
   })
   
-  
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # text 2
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   output$textWithNumber2 <- renderText({ 
     
     dis <- as.numeric(unlist(strsplit(input$popsd,",")))
