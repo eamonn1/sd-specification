@@ -120,7 +120,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                             div(h5(tags$span(style="color:blue", "Number of replicates to evaluate"))), "5"),
                                   tags$hr(), 
                                   textInput('alpha', 
-                                            div(h5(tags$span(style="color:blue", "alpha level"))), "0.000003"),
+                                            div(h5(tags$span(style="color:blue", "alpha level"))), "0.000003")
                                   
                                   
                                 #  textInput('or2', 
@@ -174,46 +174,52 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
 #The baseline input required is a repeatability sd from a reliable source i.e. a precision study"),
                                       
               
-                                       fluidRow(
-                                         column(width = 6, offset = 0, style='padding:1px;',
-                                                
-                                            #    div(plotOutput("beta",  width=fig.width7, height=fig.height7)),
-                                           # div( verbatimTextOutput("dat") ),
-                                         ) ,
-                                        
-                                         
-                                         fluidRow(
-                                           column(width = 5, offset = 0, style='padding:1px;',
-                                        #         div( verbatimTextOutput("dat1") ),
-                                                 # div(plotOutput("reg.plotx",  width=fig.width7, height=fig.height7)) 
-                                                  
-                                           ))),
 
-h4(htmlOutput("textWithNumber",) ),
+                                       h4(htmlOutput("textWithNumber",) ),
                                        h4(paste("Using the following to calculate the specification")), 
 
 
-withMathJax(
+                                      withMathJax(
   
-  helpText(
-    tags$span(style="color:black",
+                                      helpText(
+                                           tags$span(style="color:black",
               ' 
               $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
               '))),
 
-
-
-
-                                   
+ 
                                       h4(htmlOutput("textWithNumber2",) ),
 
-                                       div(plotOutput("his",  width=fig.width7, height=fig.height7)),
-                                             div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
+                                          #  div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
+
+
+
+fluidRow(
+  column(width = 6, offset = 0, style='padding:1px;',
+         
+         div(plotOutput("his",  width=fig.width7, height=fig.height7))
+  ) ,
+  
+  
+  fluidRow(
+    column(width = 5, offset = 0, style='padding:1px;',
+           
+           div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
+    )))
 
 
 
 
 
+
+
+
+
+
+
+
+
+ 
                               ) ,
                               
                               tabPanel("2 xxxxxxx", value=3, 
@@ -228,6 +234,23 @@ withMathJax(
                                        
                                        
                               ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                               
                               tabPanel("3 xxxxx", value=7, 
                                
@@ -256,7 +279,34 @@ withMathJax(
                                         
                               ) ,
                               
-                             
+                             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
              
@@ -629,7 +679,7 @@ server <- shinyServer(function(input, output   ) {
     popsd.<-   sample$popsd
     sims. <-   sample$sims
 
-    h <-  hist(dx, breaks=1000, xlab="SD", 
+    h <-  hist(dx,  breaks="FD", xlab="SD", 
     main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a population SD of",popsd.,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
     abline(v = sp, col = "blue", lwd = 2, lty=2)
 
@@ -652,12 +702,12 @@ server <- shinyServer(function(input, output   ) {
  
      z <- (dx^2)*(df)/(popsd.^2) ## this is chi square distributed.  
 
-    h <-  hist(z, breaks=1000, xlab="SD", prob=TRUE,
+    h <-  hist(z,   breaks="FD", xlab="SD", prob=TRUE,
                main=paste("Distribution of", sims., "SDs each of sample size",
                           reps.,"drawn from a population SD of",popsd.,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
     abline(v = sp, col = "blue", lwd = 2, lty=2)
    
-    curve( dchisq(x, df=df) , col='green', add=TRUE)
+    curve( dchisq(x, df=df) , col='red', add=TRUE, lty=2, lwd=3)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
  
