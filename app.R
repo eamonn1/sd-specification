@@ -654,12 +654,12 @@ server <- shinyServer(function(input, output   ) {
     popsd <- as.numeric(unlist(strsplit(input$popsd,",")))
     sims <- as.numeric(unlist(strsplit(input$sims,",")))
     reps <- as.numeric(unlist(strsplit(input$reps,",")))
-    alpha<- as.numeric(unlist(strsplit(input$alpha,",")))
+    #alpha<- as.numeric(unlist(strsplit(input$alpha,",")))
      
     return(list(  
       sims=sims[1],       # Number of simulation
       reps=reps[1],   # replicates
-      alpha=alpha[1],   # alpha
+     # alpha=alpha[1],   # alpha
       popsd=popsd[1] # sd
      
     ))
@@ -674,13 +674,21 @@ server <- shinyServer(function(input, output   ) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   spec <- reactive({
     
-    sample <- random.sample()
+  sample <- random.sample()
     
-    sims.    <-   sample$sims
-    reps. <-      sample$reps
-    alpha.  <-    sample$alpha
-    popsd.  <-    sample$popsd
- 
+    # sims.    <-   sample$sims
+    # reps. <-      sample$reps
+    # #alpha.  <-    sample$alpha
+    # alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )
+    #     popsd.  <-    sample$popsd
+    # 
+        
+        popsd. <- as.numeric(unlist(strsplit(input$popsd,",")))
+        sims. <- as.numeric(unlist(strsplit(input$sims,",")))
+        reps. <- as.numeric(unlist(strsplit(input$reps,",")))
+   #     alpha.<-( as.numeric(unlist(strsplit(input$alpha,","))))
+        
+        
     spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)  
     
     x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
@@ -707,7 +715,7 @@ server <- shinyServer(function(input, output   ) {
  
     dat <- ci0()$d
 
-    alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )
+    alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )
    
     df <- length(dat)-1
     est <- var(dat)
@@ -814,8 +822,8 @@ server <- shinyServer(function(input, output   ) {
      z <- (dx^2)*(df)/(popsd.^2) ## this is chi square distributed.  
 
     h <-  hist(z,   breaks="FD", xlab="Chi-square distribution", prob=TRUE,
-               main=paste0("Blue dashed line chi-square distribution d.f =", df, ", histogram created using 
-               equation 4 pluging in the simulated squared SDs (seen left), degrees \nof freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
+               main=paste0("Blue dashed line is the chi-square distribution with d.f =", df, ", histogram created 
+               using equation 4 pluging in the simulated squared SDs (seen left), \ndegrees of freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
     #abline(v = sp, col = "blue", lwd = 2, lty=2)
    
     curve( dchisq(x, df=df) , col='blue', add=TRUE, lty=2, lwd=3)
@@ -1165,19 +1173,14 @@ server <- shinyServer(function(input, output   ) {
                  
                  , tags$span(style="color:purple",  p4(d) ) ,
                  
-                 " the error is considered consistent with the established test method error.",
-                 
-                 
-                 br(), br(),  
-                 
-                 "As an aside we can also check the analytic derived specification of "
+                 " the error is considered consistent with the established test method error. As an aside we can also check the analytic derived specification of "
                  , tags$span(style="color:purple",  p4( d) ) ,
-                 " using simulation, with "
+                 " using simulation. With "
                  , tags$span(style="color:purple",  (n) ) ," Monte Carlo simulations",
 
                  
                  " we estimate the specification as "
-                 , tags$span(style="color:purple",  p4(d1) ) ,". Remember to estimate a quantile in the extreme tails requires a very large number of simulations."
+                 , tags$span(style="color:purple",  p4(d1) ) ,". Remember to estimate a quantile in the extreme tails requires a very large number of Monte Carlo simulations."
                  
                  
                  
