@@ -110,7 +110,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                   ),
                                   
                                   textInput('sims', 
-                                            div(h5(tags$span(style="color:blue", "Number of Monte Carlo simulations"))), "1e5"),
+                                            div(h5(tags$span(style="color:blue", "Number of Monte Carlo simulations"))), "1e4"),
                                   
                                   tags$hr(),
                                   textInput('popsd', 
@@ -176,7 +176,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
               
 
                                        h4(htmlOutput("textWithNumber",) ),
-                                       h4(paste("Using the following to calculate the specification")), 
+                                       h4(paste("Plugging in alpha, the population variance and the number of replicates (n) into equation [5] we calculate the specification.")), 
 
 
                                       withMathJax(
@@ -184,8 +184,45 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                       helpText(
                                            tags$span(style="color:black",
               ' 
-              $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
+              
+                            $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
+
+              
+                             
+                            
               '))),
+
+h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below right.")), 
+
+
+withMathJax(
+helpText(
+  tags$span(style="color:black",
+            ' 
+              
+                         
+              
+                            $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 4 \\right]  \\!$$ 
+                            
+              '))),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
                                       h4(htmlOutput("textWithNumber2",) ),
@@ -225,7 +262,16 @@ fluidRow(
                               tabPanel("2 xxxxxxx", value=3, 
                                             
                                       # div(plotOutput("reg.plot99", width=fig.width1, height=fig.height1)),
-                                       
+                                      h4("Standard deviation"), 
+                                      div( verbatimTextOutput("sd1")),
+                                      h4("Variance"), 
+                                      div( verbatimTextOutput("var1")),
+                                      h4("standard deviation confidence interval "), 
+                                      div( verbatimTextOutput("conf2")),
+                                      h4("Variance confidence interval "), 
+                                      div( verbatimTextOutput("conf")),
+                                      h4("Sample of replicates"), 
+                                      div( verbatimTextOutput("sample")),
                                        fluidRow(
                                          column(width = 7, offset = 0, style='padding:1px;',
                                                 h4(paste("Figure 3. xxxxxxxxxxxxxxxxxxxxxxx.")), 
@@ -641,9 +687,74 @@ server <- shinyServer(function(input, output   ) {
     
     sim. <- quantile(x1, c(1-alpha.))   # simulation spec one sided
     
-    return(list( sims.=sims., reps.=reps., alpha.=alpha., popsd.=popsd. , spec.=spec., x1=x1, sim.=sim.)) 
+    onesample <-  rnorm( reps., 0, popsd.)
+    
+    return(list( sims.=sims., reps.=reps., alpha.=alpha., popsd.=popsd. , spec.=spec., x1=x1, sim.=sim., onesample=onesample)) 
+    
   })
    
+  
+  ci0 <- reactive({
+    
+    d <- spec()$onesample  # simulated sample
+     
+    return(list( d=d )) 
+    
+  })
+  
+  # ci of pop from sample
+  ci <- reactive({
+ 
+    dat <- ci0()$d
+
+    alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )
+   
+    df <- length(dat)-1
+    est <- var(dat)
+   
+    lower <- df* est/qchisq(df=df, p=1-alpha./2)
+    upper <- df* est/qchisq(df=df, p=alpha./2)
+    
+    cis <- c(lower, upper)
+    sdcis <- c(lower^.5, upper^.5)
+    return(list(cis=cis ,d=dat, sdcis=sdcis ,var1=est , sd1=est^.5)) 
+    
+  })
+  
+  output$var1 <- renderPrint({
+    
+    d <- ci()$var1
+    
+    return(print(d, digits=4))
+  })
+  
+  output$sd1 <- renderPrint({
+    
+    d <- ci()$sd1
+    
+    return(print(d, digits=4))
+  })
+  
+  output$conf <- renderPrint({
+    
+    d <- ci()$cis
+    
+    return(print(d, digits=4))
+  })
+  
+  output$conf2 <- renderPrint({
+    
+    d <- ci()$sdcis
+    
+    return(print(d, digits=4))
+  })
+  
+  output$sample <- renderPrint({
+    
+    d <- ci()$d
+    
+    return(print(d, digits=4))
+  })
   
   
   output$dat <- renderPrint({
@@ -679,9 +790,9 @@ server <- shinyServer(function(input, output   ) {
     popsd.<-   sample$popsd
     sims. <-   sample$sims
 
-    h <-  hist(dx,  breaks="FD", xlab="SD", 
-    main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a population SD of",popsd.,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
-    abline(v = sp, col = "blue", lwd = 2, lty=2)
+    h <-  hist(dx,  breaks="FD", xlab="Standard deviation", xlim=c(0, sp*1.1),
+    main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,"black line indicates the upper specification of", p4(sp) ) , col="violet", border='blue')
+    abline(v = sp, col="black",   lwd = 2, lty=2)
 
     })
 
@@ -702,12 +813,12 @@ server <- shinyServer(function(input, output   ) {
  
      z <- (dx^2)*(df)/(popsd.^2) ## this is chi square distributed.  
 
-    h <-  hist(z,   breaks="FD", xlab="SD", prob=TRUE,
-               main=paste("Distribution of", sims., "SDs each of sample size",
-                          reps.,"drawn from a population SD of",popsd.,"\nblue line indicates the upper specification of", p4(sp) ) , col="blue")
-    abline(v = sp, col = "blue", lwd = 2, lty=2)
+    h <-  hist(z,   breaks="FD", xlab="Chi-square distribution", prob=TRUE,
+               main=paste0("Blue dashed line chi-square distribution d.f =", df, ", histogram created using 
+               equation 4 pluging in the simulated squared SDs (seen left), degrees \nof freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
+    #abline(v = sp, col = "blue", lwd = 2, lty=2)
    
-    curve( dchisq(x, df=df) , col='red', add=TRUE, lty=2, lwd=3)
+    curve( dchisq(x, df=df) , col='blue', add=TRUE, lty=2, lwd=3)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
  
@@ -1007,57 +1118,27 @@ server <- shinyServer(function(input, output   ) {
    d1 <- spec()$sim.
     d <- spec()$spec.
     
-    
-    # sample <- random.sample()
-    # 
-    # d <-  sim()$x
-    # 
-    # sp <- spec()$spec.
-    # 
-    # sims.    <-    sample$sims
-    # reps. <-      sample$reps
-    # alpha.  <-    sample$alpha
-    # popsd.  <-    sample$popsd
-    # 
-    # 
-    # df <- reps. -1
-    
-    
-    
-    
-    
-    
-    
-    
+   
     HTML(paste0( "With a population standard deviation of "
-                 , tags$span(style="color:pink",  p4( dis) ) ,
+                 , tags$span(style="color:purple",  p4( dis) ) ,
                  " from a reliable source we will evaluate  "
-                 , tags$span(style="color:pink",  p0(ctr) ) ," replicates.",
-                 
-                 br(), br(),  
-                  
-                
-                #  tags$span(style="color:red",  p4(ctr) ) , 
-            
+                 , tags$span(style="color:purple",  p0(ctr) ) ," replicates.",
+
                  " We have set the one sided alpha level to "
-                 , tags$span(style="color:pink",  p8(or1) ) ,
+                 , tags$span(style="color:purple",  p8(or1) ) ,
                 ". This is equivalent to a upper confidence limit of ",
-                tags$span(style="color:pink",  p5(100*(1-or1)) ) , 
-                tags$span(style="color:pink",   "%. " ) , 
+                tags$span(style="color:purple",  p5(100*(1-or1)) ) , 
+                tags$span(style="color:purple",   "%. " ) , 
                 
                 "This means we are prepared to accept  "
-                 , tags$span(style="color:pink",  p0(or1*1e6) ) ,
+                 , tags$span(style="color:purple",  p0(or1*1e6) ) ,
                  " out of specification results if we were to perform 1 million evaluations 
                 using "
-                 , tags$span(style="color:pink",  p0(ctr) ) ," replicates ",
+                 , tags$span(style="color:purple",  p0(ctr) ) ," replicates ",
                  " when in truth every sample of " 
-                , tags$span(style="color:pink",  p0(ctr) ) ," replicates are from the stated population. "
+                , tags$span(style="color:purple",  p0(ctr) ) ," replicates are from the stated population. "
                 
-
-           
-               
-              
-               
+          
                
     ))    
     
@@ -1079,28 +1160,24 @@ server <- shinyServer(function(input, output   ) {
     
     HTML(paste0( 
                  "We can therefore state if the standard deviation of the "
-                 , tags$span(style="color:pink",  p0(ctr) ) ,
+                 , tags$span(style="color:purple",  p0(ctr) ) ,
                  " replicated measurements is less than or equal to the calculated specification of "
                  
-                 , tags$span(style="color:pink",  p4(d) ) ,
+                 , tags$span(style="color:purple",  p4(d) ) ,
                  
                  " the error is considered consistent with the established test method error.",
                  
                  
                  br(), br(),  
                  
-                 "We can also check the analytic derived specification of "
-                 , tags$span(style="color:pink",  p4( d) ) ,
+                 "As an aside we can also check the analytic derived specification of "
+                 , tags$span(style="color:purple",  p4( d) ) ,
                  " using simulation, with "
-                 , tags$span(style="color:pink",  (n) ) ," Monte Carlo simulations",
-                 
-                 # br(), br(),  
-                 
-                 
-                 #  tags$span(style="color:red",  p4(ctr) ) , 
+                 , tags$span(style="color:purple",  (n) ) ," Monte Carlo simulations",
+
                  
                  " we estimate the specification as "
-                 , tags$span(style="color:pink",  p4(d1) ) ,"."
+                 , tags$span(style="color:purple",  p4(d1) ) ,". Remember to estimate a quantile in the extreme tails requires a very large number of simulations."
                  
                  
                  
