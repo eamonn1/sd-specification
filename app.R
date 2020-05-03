@@ -120,7 +120,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                             div(h5(tags$span(style="color:blue", "Number of replicates to evaluate"))), "5"),
                                   tags$hr(), 
                                   textInput('alpha', 
-                                            div(h5(tags$span(style="color:blue", "alpha level"))), "0.000003"),
+                                            div(h5(tags$span(style="color:blue", "alpha level"))), "0.000003")
                                   
                                   
                                 #  textInput('or2', 
