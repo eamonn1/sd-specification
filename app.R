@@ -219,27 +219,27 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                        
                                        
                                        fluidRow(
-                                         column(width = 6, offset = 0, style='padding:1px;',
+                                         column(width = 12, offset = 0, style='padding:1px;',
                                                 
-                                                h4("A single sample of replicates (from the the population SD data generating mechanism)"), 
+                                                h4("(1) A single random sample of replicates (from the the population standard deviation, the data generating mechanism)"), 
                                                 div( verbatimTextOutput("sample")),
-                                                h4("The standard deviation of the replicates"), 
+                                                h4("(2) The standard deviation of the replicates in (1)"), 
                                                 div( verbatimTextOutput("sd1")),
-                                                h4("Upper one-sided specification for the standard deviation of the replicates (see alpha level)"), 
+                                                h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation, not dependent on actual replicate values in (1)"), 
                                                 div( verbatimTextOutput("datx")),
                                                 
                                                 
                                                 
-                                                h4("The variance of the replicates"), 
+                                                h4("(4) The variance of the replicates in (1)"), 
                                                 div( verbatimTextOutput("var1")),
                                                 
-                                                h4("Upper one-sided specification for variance of the replicates (see alpha level)"), 
+                                                h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation, not dependent on actual replicate values in (1)"), 
                                                 div( verbatimTextOutput("datxy")),
                                                 
-                                                h4("Confidence interval for the standard deviation (two-sided based on alpha level)"), 
+                                                h4("(6) Confidence interval for the standard deviation using the replicates in (1) (two-sided based on alpha level)"), 
                                                 div( verbatimTextOutput("conf2")),
                                                 
-                                                h4("Confidence interval for the variance (two-sided based on alpha level)"), 
+                                                h4("(7) Confidence interval for the variance using the replicates in (1) (two-sided based on alpha level)"), 
                                                 div( verbatimTextOutput("conf")),
                                                
                                          ) ,
