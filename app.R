@@ -179,7 +179,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                             
               '))),
 
-              h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below right.")), 
+              h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below left.")), 
 
 
                   withMathJax(
@@ -200,14 +200,14 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                       fluidRow(
                                         column(width = 6, offset = 0, style='padding:1px;',
                                                
-                                               div(plotOutput("his",  width=fig.width7, height=fig.height7))
+                                               div(plotOutput("his2",  width=fig.width7, height=fig.height7))
                                         ) ,
                                         
                                         
                                         fluidRow(
                                           column(width = 5, offset = 0, style='padding:1px;',
                                                  
-                                                 div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
+                                                 div(plotOutput("his",  width=fig.width7, height=fig.height7)),
                                           )))
 
 
@@ -225,7 +225,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                                 div( verbatimTextOutput("sample")),
                                                 h4("(2) The standard deviation of the replicates in (1)"), 
                                                 div( verbatimTextOutput("sd1")),
-                                                h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation, not dependent on actual replicate values in (1)"), 
+                                                h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
                                                 div( verbatimTextOutput("datx")),
                                                 
                                                 
@@ -233,7 +233,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                                 h4("(4) The variance of the replicates in (1)"), 
                                                 div( verbatimTextOutput("var1")),
                                                 
-                                                h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation, not dependent on actual replicate values in (1)"), 
+                                                h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
                                                 div( verbatimTextOutput("datxy")),
                                                 
                                                 h4("(6) Confidence interval for the standard deviation using the replicates in (1) (two-sided based on alpha level)"), 
@@ -547,7 +547,7 @@ server <- shinyServer(function(input, output   ) {
 
     h <-  hist(z,   breaks="FD", xlab="Chi-square distribution", prob=TRUE,
                main=paste0("Blue dashed line is the chi-square distribution with d.f =", df, ", histogram created 
-               using equation 4 pluging in the simulated squared SDs (seen left), \ndegrees of freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
+               using equation 4 pluging in the simulated squared SDs (right histogram), \ndegrees of freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
 
     curve( dchisq(x, df=df) , col='blue', add=TRUE, lty=2, lwd=3)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -561,12 +561,13 @@ server <- shinyServer(function(input, output   ) {
   output$textWithNumber <- renderText({ 
     
     dis <- as.numeric(unlist(strsplit(input$popsd,",")))
-    n <- as.numeric(unlist(strsplit(input$sims,",")))
+   # n <- as.numeric(unlist(strsplit(input$sims,",")))
     ctr <- as.numeric(unlist(strsplit(input$reps,",")))
     or1<- as.numeric(unlist(strsplit(input$alpha,",")))
     
-    d1 <- spec()$sim.
-    d <- spec()$spec.
+   # d1 <- spec()$sim.
+  #  d <- spec()$spec.
+    
     
     HTML(paste0( "With a population standard deviation of "
                  , tags$span(style="color:purple",  p4( dis) ) ,
@@ -597,18 +598,30 @@ server <- shinyServer(function(input, output   ) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   output$textWithNumber2 <- renderText({ 
     
-    dis <- as.numeric(unlist(strsplit(input$popsd,",")))
-    n <- as.numeric(unlist(strsplit(input$sims,",")))
-    ctr <- as.numeric(unlist(strsplit(input$reps,",")))
-    or1<- as.numeric(unlist(strsplit(input$alpha,",")))
-    
+    # sims <- as.numeric(unlist(strsplit(input$sims,",")))
+   # reps <- as.numeric(unlist(strsplit(input$reps,",")))
+     
  
-    d1 <- spec()$sim.
-    d <- spec()$spec.
+   # d1 <- spec()$sim.   # simulated spec
+  #  d <- spec()$spec.   # analytical spec
+    
+    popsd.  <- step()$popsd.
+    sims. <-   step()$sims.
+    reps.   <- step()$reps. 
+    
+    
+    alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )  ### isolate this so not update with clicking resample button
+    
+    d <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
+    
+       
+    x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
+     d1 <- quantile(x1, c(1-alpha.))   # simulation spec one sided
+    
     
     HTML(paste0( 
                  "We can therefore state if the standard deviation of the "
-                 , tags$span(style="color:purple",  p0(ctr) ) ,
+                 , tags$span(style="color:purple",  p0(reps.) ) ,
                  " replicated measurements is less than or equal to the calculated specification of "
                  
                  , tags$span(style="color:purple",  p4(d) ) ,
@@ -616,7 +629,7 @@ server <- shinyServer(function(input, output   ) {
                  " the error is considered consistent with the established test method error. As an aside we can also check the analytic derived specification of "
                  , tags$span(style="color:purple",  p4( d) ) ,
                  " using simulation. With "
-                 , tags$span(style="color:purple",  (n) ) ," Monte Carlo simulations",
+                 , tags$span(style="color:purple",  (sims.) ) ," Monte Carlo simulations",
 
                  
                  " we estimate the specification as "
