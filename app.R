@@ -152,6 +152,15 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                             .navbar-default .navbar-nav > li > a[data-value='t3'] {color: green;background-color: lightgreen;}
                    ")),
                               
+                              ######
+                              
+                              
+                         
+                              
+                              
+                              
+                              
+                              
                               
                               tabPanel("1 Distribution of population variance", value=7, 
           
@@ -263,11 +272,11 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                   ")) ,
             
             h4(("We have an example data set to get things started (download the file and click 'Browse...' to locate and upload for analysis). 
-            This is SIDS data, 11 cases of baby birth weights in gramms, the data can be found on page 97 of reference [2]. 
+            This is SIDS data, 11 cases of baby birth weights in grams, the data can be found on page 97 of reference [2]. 
             For this data enter an alpha of 0.05 for 95% 
                 CIs and 800 for the population SD (as stated in the reference). There is no need to enter the number of replicates, 
                 this is automatically determined.
-                We output the data, SD, one-sided SD specification and confidence intervals for SD and variance:")) ,
+                We output the data, SD, one-sided SD specification and confidence intervals for SD and variance.")) ,
              
             
             div(p(" ")),
@@ -352,7 +361,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
    ######
    
                              
-                             tabPanel("4 Explanation", value=3, 
+                             tabPanel("4 Theory", value=3, 
                                       
                            
                                    tags$span(style="color:black",
@@ -386,13 +395,13 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                      $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
                                      
                                     So if we have a reliable estimate of the population variance, 
-                                    we can calculate a specification say 95% confidence (50000 in a million) or 99.9997% (3 in a million) to see if the sample replicate variation
+                                    we can calculate a specification say 95% confidence (50000 in a million) or 99.9997% (3 in a million) or whatever we wish to see if the sample replicate variation
                                     is consistent with the population variance. A specification such as 3 in a million is useful for example in the diagnostic industry,
                                     where huge numbers of replicates are run in the field and during analytical studies for example.
                                      
 
  
-                                     Now if we want to calculate a confidence interval for the population variance, based on the standard deviation from a sample  
+                                     Now if we want to calculate a confidence interval for the population variance, based on the standard deviation from a sample: 
                                      
                                      $$ {  P\\left[ {(\\chi^2}_{(n - 1), (\\alpha/2)})   \\le {     {\\chi^2}_{(n - 1)} \\le \ {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }     \\right] =   1-\\alpha}  \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 6 \\right]  \\!$$  
                                      
@@ -413,7 +422,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                    br()
                                
                              )
-                              
+                              #############################
                            
                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   END NEW   
                             )
@@ -720,7 +729,7 @@ server <- shinyServer(function(input, output   ) {
                  
                  , tags$span(style="color:purple",  p4(d) ) ,
                  
-                 " the error is considered consistent with the established test method error. As an aside we can also check the analytic derived specification of "
+                 " the error is considered consistent with the established test method error. As an aside we can also check the analytically derived specification of "
                  , tags$span(style="color:purple",  p4( d) ) ,
                  " using simulation. With "
                  , tags$span(style="color:purple",  (sims.) ) ," Monte Carlo simulations",
