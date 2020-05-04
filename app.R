@@ -127,9 +127,9 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 
                                 tags$hr(),
                                 div(h4("References:")),  
-                                tags$a(href = "https://www.amazon.com/Statistical-Evaluation-Measurement-Errors-Reliability/dp/0340760702", tags$span(style="color:blue", "[1] Graham Dunn (2nd edition section 2.6.1 page 35"),),   
+                                tags$a(href = "https://www.amazon.com/Statistical-Evaluation-Measurement-Errors-Reliability/dp/0340760702", tags$span(style="color:blue", "[1] Graham Dunn (2nd edition, Section 2.6.1, page 35)"),),   
                                 div(p(" ")),
-                                tags$a(href = "https://www.wiley.com/en-us/Biostatistics%3A+A+Methodology+For+the+Health+Sciences%2C+2nd+Edition-p-9780471031857",  tags$span(style="color:blue", "[2] Biostatisics A Methodology for the Health Sciences, 2nd Ed. page 96"),),   
+                                tags$a(href = "https://www.wiley.com/en-us/Biostatistics%3A+A+Methodology+For+the+Health+Sciences%2C+2nd+Edition-p-9780471031857",  tags$span(style="color:blue", "[2] Biostatisics A Methodology for the Health Sciences, 2nd edition, page 96"),),   
                                 div(p(" ")),
                                 tags$hr(),
                                 
@@ -197,18 +197,18 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
 
  
 
-fluidRow(
-  column(width = 6, offset = 0, style='padding:1px;',
-         
-         div(plotOutput("his",  width=fig.width7, height=fig.height7))
-  ) ,
-  
-  
-  fluidRow(
-    column(width = 5, offset = 0, style='padding:1px;',
-           
-           div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
-    )))
+                                      fluidRow(
+                                        column(width = 6, offset = 0, style='padding:1px;',
+                                               
+                                               div(plotOutput("his",  width=fig.width7, height=fig.height7))
+                                        ) ,
+                                        
+                                        
+                                        fluidRow(
+                                          column(width = 5, offset = 0, style='padding:1px;',
+                                                 
+                                                 div(plotOutput("his2",  width=fig.width7, height=fig.height7)),
+                                          )))
 
 
 
@@ -297,7 +297,7 @@ fluidRow(
                                     where huge numbers of replicates are run in the field and during analytical studies for example.
                                      
 
-$$ $$
+                                      $$ $$
                                      Now if we want to calculate a confidence interval for the population variance, based on the standard deviation from a sample  
                                      
                                      $$ {  P\\left[ {(\\chi^2}_{(n - 1), (\\alpha/2)})   \\le {     {\\chi^2}_{(n - 1)} \\le \ {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }     \\right] =   1-\\alpha}  \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 6 \\right]  \\!$$  
@@ -311,8 +311,7 @@ $$ $$
                                       $$ {  P\\left[   { \\frac{  {\\it{s}^2} {(n-1)} } {(\\chi^2_{(n - 1), (1-\\alpha/2)} )}}     \\le   {\\sigma^2}  \\le  { \\frac{  {\\it{s}^2} {(n-1)} } {(\\chi^2_{(n - 1), (\\alpha/2)}) }}     \\right]    =   1-\\alpha    }  \\qquad \\qquad  \\qquad\\qquad \\qquad  \\qquad \\left[ 8 \\right]  \\!$$ 
 
                                      '))),
-                                   
-                                    
+
                                    
                                    br(),
                                    br(),
@@ -321,10 +320,7 @@ $$ $$
                                
                              )
                               
-              
-                             
-                             
-                             
+                           
                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   END NEW   
                             )
                             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -360,20 +356,49 @@ server <- shinyServer(function(input, output   ) {
     ))
     
   })
+  
+  
+  step <- reactive({
+    
+    sample <- random.sample()
+ 
+    
+    popsd. <- as.numeric(unlist(strsplit(input$popsd,",")))
+    sims.  <- as.numeric(unlist(strsplit(input$sims,",")))
+    reps.  <- as.numeric(unlist(strsplit(input$reps,",")))
+    
+    return(list(   popsd.=popsd., sims.=sims.,reps.=reps.)) 
+    
+    
+  })
+  
+  
+  
+  
+  
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # tab 1 simulate po model data and analyse
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~NOT OK
   spec <- reactive({
     
-  sample <- random.sample()
+  #sample <- random.sample()
     
-        popsd. <- as.numeric(unlist(strsplit(input$popsd,",")))
-        sims.  <- as.numeric(unlist(strsplit(input$sims,",")))
-        reps.  <- as.numeric(unlist(strsplit(input$reps,",")))
+  popsd.  <- step()$popsd.
+  sims. <- step()$sims.
+  reps.   <- step()$reps. 
+  
+    
+      #  popsd. <- as.numeric(unlist(strsplit(input$popsd,",")))
+   #     sims.  <- as.numeric(unlist(strsplit(input$sims,",")))
+   #     reps.  <- as.numeric(unlist(strsplit(input$reps,",")))
 
+        #alpha. <- step()$alpha99
+        alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )  ### ok now
+      #  alpha99  <-     (as.numeric(unlist(strsplit(input$alpha,","))) )  ### ok now
         
-    spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)  
+        
+    spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### is this working? create a new alpha object?
     
     x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
     
@@ -392,7 +417,7 @@ server <- shinyServer(function(input, output   ) {
     return(list( d=d )) 
     
   })
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~OK
   # ci of pop from sample
   ci <- reactive({
  
