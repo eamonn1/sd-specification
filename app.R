@@ -19,26 +19,11 @@ library(tidyverse)
 #options(mc.cores = parallel::detectCores())
 #rstan_options(auto_write = TRUE)
 options(max.print=1000000)    
-fig.width <- 400
-fig.height <- 300
-fig.width1 <- 1380
-fig.height1 <- 700
-fig.width2 <- 1400
-fig.height2 <- 300
-fig.width3 <- 1400  
-fig.height3 <- 600
-fig.width4 <- 1380
-fig.height4 <- 450
-fig.width5 <- 1380
-fig.height5 <- 225
-fig.width6 <- 400
-fig.height6 <- 550
-fig.width7 <- 600
-fig.widthx <- 593
-fig.heightx <- 268
-fig.height7 <- 600
-fig.width9 <- 1380
-fig.height9 <- 500
+ 
+fig.width7 <- 670
+ 
+fig.height7 <- 500
+ 
 
 ## convenience functions
 p0 <- function(x) {formatC(x, format="f", digits=0)}
@@ -98,8 +83,13 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 br(),  
                                 tags$style(".well {background-color:#b6aebd ;}"), 
                                 
-                                h4("Instructions: The first input below is number of Monte Carlo simulations. The second is the true data generating population SD. The third input is the 
-                                   number of replicates to be generated. The last input is the alpha level, the default set at a one-sided 3 in a million level."),
+                                h4("Tab 1 presents the chi-squared sampling distribution and how to calculate a specification (false invalid risk) for a standard deviation (or variance).
+                                   Tab 2 presents an example calcualtion based on the user inputs. Tab 3 allows a user to upload their own data and the final tab shows the theory."),
+                                
+                                h4("Instructions: The first input below is number of Monte Carlo simulations. 
+                                The second is the true data generating population SD. The third input is the 
+                                   number of replicates to be generated. The last input is the alpha level, 
+                                   the default set at a one-sided 3 in a million level."),
                                 div(
                                   
                                   tags$head(
@@ -267,18 +257,23 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
    
    tabPanel("3 Upload your own data for analysis", fluid = TRUE,
             
-            p(("Upload your own data for analysis The top two radio button options are to help load,
-                                 the bottom two options are to either show the top six rows of the data or show all the data, and secondly to toggle between PBE analysis or a plot of the data. 
-                                 Ensure your data is balanced within product. Use at your own risk.")) ,
+            h4(("Upload your own data for analysis, the two radio button options are to help load.
+                                  
+                                  ")) ,
             
-            p(("Example data sets (download either file and click 'Browse...' to locate and upload for PBE analysis):")) ,
+            h4(("We have an example data set to get things started (download the file and click 'Browse...' to locate and upload for analysis). 
+            This is SIDS data, 11 cases of baby birth weights in gramms, the data can be found on page 97 of reference [2]. 
+            For this data enter an alpha of 0.05 for 95% 
+                CIs and 800 for the population SD (as stated in the reference). There is no need to enter the number of replicates, 
+                this is automatically determined.
+                We output the data, SD, one-sided SD specification and confidence intervals for SD and variance:")) ,
+             
             
-            tags$a(href = "https://raw.githubusercontent.com/eamonn2014/sd-specification/master/SIDS", "SIDS data [2]"),
             div(p(" ")),
-            
-            #tags$a(href = "https://raw.githubusercontent.com/eamonn2014/Three-level-nested-variance-components-analysis2/master/fda%20B%20rep%20only", "xxxxxxxxxxxx"),
-            #div(p(" ")),
-            
+            tags$a(href = "https://raw.githubusercontent.com/eamonn2014/sd-specification/master/SIDS",  
+                   tags$span(style="color:blue", "Link to a file of the example dataset"),),   
+            div(p(" ")),
+         
             sidebarLayout(
               
               # Sidebar panel for inputs ----
@@ -316,20 +311,20 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                 tags$hr(),
                 
                 # Input: Select number of rows to display ----
-                radioButtons("disp", "Display",
-                             choices = c(Head = "head",
-                                         All = "all"),
-                             selected = "head"),
-                
-                # Horizontal line ----
-                tags$hr(),
-                
-                # Input: Select number of rows to display ----
-                radioButtons("what", "Output",
-                             choices = c(Analysis = "Analysis",
-                                         Plot = "plot"),
-                             selected = "Analysis")
-                
+              #   radioButtons("disp", "Display",
+              #                choices = c(Head = "head",
+              #                            All = "all"),
+              #                selected = "head"),
+              #   
+              #   # Horizontal line ----
+              #   tags$hr(),
+              #   
+              #   # Input: Select number of rows to display ----
+              #   radioButtons("what", "Output",
+              #                choices = c(Analysis = "Analysis",
+              #                            Plot = "plot"),
+              #                selected = "Analysis")
+              #   
               ),
               
               # Main panel for displaying outputs ----
@@ -339,6 +334,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                 
                 
                  div(verbatimTextOutput("contents2")),
+            #    div(verbatimTextOutput("contents3")),
                 # plotOutput("plotx"),
                 # tags$hr(),
                 # 
@@ -355,7 +351,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
    ######
    
                              
-                             tabPanel("3 Explanation", value=3, 
+                             tabPanel("4 Explanation", value=3, 
                                       
                            
                                    tags$span(style="color:black",
@@ -748,8 +744,10 @@ server <- shinyServer(function(input, output   ) {
  
   
   
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
-   user <-  reactive({
+  
+  user <-  reactive({
     
     req(input$file1)
     
@@ -758,20 +756,14 @@ server <- shinyServer(function(input, output   ) {
                    sep =   input$sep,
                    quote = input$quote)
     
-    df<- as.vector(df)
+    df <-  (as.vector(df))
     
-    
-    sd.user <- sd(df)
-    
-    
-    return(list(sd.user=sd.user))
+ return(list(df=df))
     
     
     
   })     
   
-  
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   
   
@@ -780,30 +772,35 @@ server <- shinyServer(function(input, output   ) {
    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    output$contents2 <- renderPrint({
      
-   #  if(input$what == "Analysis"){
+       u <- user()$df
        
-       df<-NULL
-       req(input$file1)
-       df <- read.csv(input$file1$datapath,
-                      header = input$header,
-                      sep = input$sep,
-                      quote = input$quote)
-      
-       df<- as.vector(df)
+       sd.user <- sd(u)
+       
+       popsd.  <- step()$popsd.
+       sims. <-   step()$sims.
+       reps.   <- step()$reps. 
        
        
-       sd.user <- sd(df)
+       alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )  ### isolate this so not update with clicking resample button
+       
+       d <- sd.spec(input.sd=popsd., alph=alpha., n=length(u))    ### 
        
        
-       return(list(sd.user=sd.user))
+       df <- length(u)-1
+       est <- sd.user^2
+       
+       lower <- df* est/qchisq(df=df, p=1-alpha./2)
+       upper <- df* est/qchisq(df=df, p=alpha./2)
+       
+       cis <- c(lower, upper)
+       sdcis <- c(lower^.5, upper^.5)
+       
+
+ 
+       return(list(data=u , SD.user.data=sd.user, Variance.user.data=est , SD.spec.user.data=d,  SD.confidence.interval.user.data=sdcis, 
+                   Variance.confidence.interval.user.data=cis))
         
      })
-  
-  
-  
-  
-  
-  
   
   
   
