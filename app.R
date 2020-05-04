@@ -358,6 +358,7 @@ server <- shinyServer(function(input, output   ) {
   })
   
   
+  # not haveing alpha here, but in next step allows it not to resample
   step <- reactive({
     
     sample <- random.sample()
@@ -382,23 +383,16 @@ server <- shinyServer(function(input, output   ) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~NOT OK
   spec <- reactive({
     
-  #sample <- random.sample()
+  #sample <- random.sample()  code this out
     
   popsd.  <- step()$popsd.
   sims. <- step()$sims.
   reps.   <- step()$reps. 
-  
-    
-      #  popsd. <- as.numeric(unlist(strsplit(input$popsd,",")))
-   #     sims.  <- as.numeric(unlist(strsplit(input$sims,",")))
-   #     reps.  <- as.numeric(unlist(strsplit(input$reps,",")))
-
-        #alpha. <- step()$alpha99
-        alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )  ### ok now
-      #  alpha99  <-     (as.numeric(unlist(strsplit(input$alpha,","))) )  ### ok now
-        
-        
-    spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### is this working? create a new alpha object?
+ 
+ 
+    alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )  ### isolate this so not update with clicking resample button
+   
+    spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
     
     x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
     
