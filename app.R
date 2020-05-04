@@ -225,16 +225,21 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                                 div( verbatimTextOutput("sample")),
                                                 h4("(2) The standard deviation of the replicates in (1)"), 
                                                 div( verbatimTextOutput("sd1")),
-                                                h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
-                                                div( verbatimTextOutput("datx")),
+                                                
+                                                
+   # HTML(paste0("", tags$span(style="color:blue",  "(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ))) ,
+                                                
+                                               h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
+     div( verbatimTextOutput("datx")),
                                                 
                                                 
                                                 
                                                 h4("(4) The variance of the replicates in (1)"), 
                                                 div( verbatimTextOutput("var1")),
-                                                
-                                                h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
-                                                div( verbatimTextOutput("datxy")),
+   h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ) ,
+   
+                                             #  tags$span(style="color:blue",  "(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ) ,
+                                                 div( verbatimTextOutput("datxy")),
                                                 
                                                 h4("(6) Confidence interval for the standard deviation using the replicates in (1) (two-sided based on alpha level)"), 
                                                 div( verbatimTextOutput("conf2")),
@@ -257,6 +262,98 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                        
                               )),
                
+   
+   ######
+   
+   tabPanel("3 Upload your own data for analysis", fluid = TRUE,
+            
+            p(("Upload your own data for analysis The top two radio button options are to help load,
+                                 the bottom two options are to either show the top six rows of the data or show all the data, and secondly to toggle between PBE analysis or a plot of the data. 
+                                 Ensure your data is balanced within product. Use at your own risk.")) ,
+            
+            p(("Example data sets (download either file and click 'Browse...' to locate and upload for PBE analysis):")) ,
+            
+            tags$a(href = "https://raw.githubusercontent.com/eamonn2014/sd-specification/master/SIDS", "SIDS data [2]"),
+            div(p(" ")),
+            
+            #tags$a(href = "https://raw.githubusercontent.com/eamonn2014/Three-level-nested-variance-components-analysis2/master/fda%20B%20rep%20only", "xxxxxxxxxxxx"),
+            #div(p(" ")),
+            
+            sidebarLayout(
+              
+              # Sidebar panel for inputs ----
+              sidebarPanel(
+                
+                # Input: Select a file ----
+                fileInput("file1", "Choose CSV File",
+                          multiple = TRUE,
+                          accept = c("text/csv",
+                                     "text/comma-separated-values,text/plain",
+                                     ".csv")),
+                
+                # Horizontal line ----
+                tags$hr(),
+                
+                # Input: Checkbox if file has header ----
+                checkboxInput("header", "Header", FALSE),
+                
+                # Input: Select separator ----
+                radioButtons("sep", "Separator",
+                             choices = c(Comma = ",",
+                                         Semicolon = ";",
+                                         Tab = "\t",
+                                         Whitespace = ""),
+                             selected = ","),
+                
+                # Input: Select quotes ----
+                radioButtons("quote", "Quote",
+                             choices = c(None = "",
+                                         "Double Quote" = '"',
+                                         "Single Quote" = "'"),
+                             selected = ''),
+                
+                # Horizontal line ----
+                tags$hr(),
+                
+                # Input: Select number of rows to display ----
+                radioButtons("disp", "Display",
+                             choices = c(Head = "head",
+                                         All = "all"),
+                             selected = "head"),
+                
+                # Horizontal line ----
+                tags$hr(),
+                
+                # Input: Select number of rows to display ----
+                radioButtons("what", "Output",
+                             choices = c(Analysis = "Analysis",
+                                         Plot = "plot"),
+                             selected = "Analysis")
+                
+              ),
+              
+              # Main panel for displaying outputs ----
+              mainPanel(
+                
+                # Output: Data file ----
+                
+                
+                 div(verbatimTextOutput("contents2")),
+                # plotOutput("plotx"),
+                # tags$hr(),
+                # 
+                # tableOutput("contents") 
+                
+                
+              ),
+            )
+   ) ,
+   
+   
+   
+   
+   ######
+   
                              
                              tabPanel("3 Explanation", value=3, 
                                       
@@ -640,6 +737,86 @@ server <- shinyServer(function(input, output   ) {
     
   })
 
+  
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # analyse on user data, variance components for plot title
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+  
+  
+  
+   user <-  reactive({
+    
+    req(input$file1)
+    
+    df <- read.csv(input$file1$datapath,
+                   header = input$header,
+                   sep =   input$sep,
+                   quote = input$quote)
+    
+    df<- as.vector(df)
+    
+    
+    sd.user <- sd(df)
+    
+    
+    return(list(sd.user=sd.user))
+    
+    
+    
+  })     
+  
+  
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+  
+  
+   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   # PBE analysis of user uploaded data 
+   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   output$contents2 <- renderPrint({
+     
+   #  if(input$what == "Analysis"){
+       
+       df<-NULL
+       req(input$file1)
+       df <- read.csv(input$file1$datapath,
+                      header = input$header,
+                      sep = input$sep,
+                      quote = input$quote)
+      
+       df<- as.vector(df)
+       
+       
+       sd.user <- sd(df)
+       
+       
+       return(list(sd.user=sd.user))
+        
+     })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 })
