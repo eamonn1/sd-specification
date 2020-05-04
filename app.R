@@ -84,9 +84,10 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 tags$style(".well {background-color:#b6aebd ;}"), 
                                 
                                 h4("Tab 1 presents the chi-squared sampling distribution and how to calculate a specification (false invalid risk) for a standard deviation (or variance).
-                                   Tab 2 presents an example calcualtion based on the user inputs. Tab 3 allows a user to upload their own data and the final tab shows the theory."),
+                                   Tab 2 presents an example calculation based on the user inputs. 
+                                   Tab 3 allows a user to upload their own data and the final tab shows the theory."),
                                 
-                                h4("Instructions: The first input below is number of Monte Carlo simulations. 
+                                h4("Instructions: The first input below is the number of Monte Carlo simulations. 
                                 The second is the true data generating population SD. The third input is the 
                                    number of replicates to be generated. The last input is the alpha level, 
                                    the default set at a one-sided 3 in a million level."),
@@ -390,7 +391,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                     where huge numbers of replicates are run in the field and during analytical studies for example.
                                      
 
-                                      $$ $$
+ 
                                      Now if we want to calculate a confidence interval for the population variance, based on the standard deviation from a sample  
                                      
                                      $$ {  P\\left[ {(\\chi^2}_{(n - 1), (\\alpha/2)})   \\le {     {\\chi^2}_{(n - 1)} \\le \ {(\\chi^2}_{(n - 1), (1-\\alpha/2)}) }     \\right] =   1-\\alpha}  \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 6 \\right]  \\!$$  
