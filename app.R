@@ -692,17 +692,26 @@ server <- shinyServer(function(input, output   ) {
   
   output$his <- renderPlot({
     
-    sample <- random.sample()
+    #sample <- random.sample()
     
     dx <-  spec()$x1
     sp <- spec()$spec.
     
-    reps. <-   sample$reps
-    popsd.<-   sample$popsd
-    sims. <-   sample$sims
+    # reps. <-   sample$reps
+    # popsd.<-   sample$popsd
+    # sims. <-   sample$sims
+    
+    popsd.  <- step()$popsd.
+   sims. <- step()$sims.
+    reps.   <- step()$reps. 
+    
+    alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )  ### 
+    
+ sp  <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
     
     h <-  hist(dx,  breaks="FD", xlab="Standard deviation", xlim=c(0, sp*1.1),
-               main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,"black line indicates the upper specification of", p4(sp) ) , col="violet", border='blue')
+               main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,"black line indicates the upper specification of", p4(sp) ) , 
+               col="violet", border='blue')
     abline(v = sp, col="black",   lwd = 2, lty=2)
     
   })
@@ -824,14 +833,8 @@ server <- shinyServer(function(input, output   ) {
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # analyse on user data, variance components for plot title
+  # analysis on user data, 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
-  
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
-  
-  
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   
@@ -856,7 +859,7 @@ server <- shinyServer(function(input, output   ) {
   
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # PBE analysis of user uploaded data 
+  #  analysis of user uploaded data 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   output$contents2 <- renderPrint({
     
