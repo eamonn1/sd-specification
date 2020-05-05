@@ -19,11 +19,11 @@ library(tidyverse)
 #options(mc.cores = parallel::detectCores())
 #rstan_options(auto_write = TRUE)
 options(max.print=1000000)    
- 
+
 fig.width7 <- 670
- 
+
 fig.height7 <- 500
- 
+
 
 ## convenience functions
 p0 <- function(x) {formatC(x, format="f", digits=0)}
@@ -113,20 +113,20 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                   tags$hr(), 
                                   textInput('alpha', 
                                             div(h5(tags$span(style="color:blue", "Alpha level"))), "0.000003"),
-                         
-                                
-                                
-                                tags$hr(),
-                                div(h4("References:")),  
-                                tags$a(href = "https://www.amazon.com/Statistical-Evaluation-Measurement-Errors-Reliability/dp/0340760702", tags$span(style="color:blue", "[1] Graham Dunn (2nd edition, Section 2.6.1, page 35)"),),   
-                                div(p(" ")),
-                                tags$a(href = "https://www.wiley.com/en-us/Biostatistics%3A+A+Methodology+For+the+Health+Sciences%2C+2nd+Edition-p-9780471031857",  tags$span(style="color:blue", "[2] Biostatisics A Methodology for the Health Sciences, 2nd edition, page 96"),),   
-                                div(p(" ")),
-                                tags$hr(),
-                                
-                                
-                                
-                                
+                                  
+                                  
+                                  
+                                  tags$hr(),
+                                  div(h4("References:")),  
+                                  tags$a(href = "https://www.amazon.com/Statistical-Evaluation-Measurement-Errors-Reliability/dp/0340760702", tags$span(style="color:blue", "[1] Graham Dunn (2nd edition, Section 2.6.1, page 35)"),),   
+                                  div(p(" ")),
+                                  tags$a(href = "https://www.wiley.com/en-us/Biostatistics%3A+A+Methodology+For+the+Health+Sciences%2C+2nd+Edition-p-9780471031857",  tags$span(style="color:blue", "[2] Biostatisics A Methodology for the Health Sciences, 2nd edition, page 96"),),   
+                                  div(p(" ")),
+                                  tags$hr(),
+                                  
+                                  
+                                  
+                                  
                                 )
                                 
                                 
@@ -155,7 +155,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                               ######
                               
                               
-                         
+                              
                               
                               
                               
@@ -163,59 +163,59 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                               
                               
                               tabPanel("1 Distribution of population variance", value=7, 
-          
+                                       
                                        h4(htmlOutput("textWithNumber",) ),
                                        h4(paste("Plugging in alpha, the population variance and the number of replicates (n) into equation [5] we calculate the specification.")), 
-
-
-                                      withMathJax(
-  
-                                      helpText(
+                                       
+                                       
+                                       withMathJax(
+                                         
+                                         helpText(
                                            tags$span(style="color:black",
-              ' $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
+                                                     ' $$ {  {\\it{s}^2} =  \\frac{     {(\\sigma^2)}   {(\\chi^2}_{(n - 1), (1-\\alpha)}) }  {(n-1)}          } \\qquad  \\qquad \\qquad  \\qquad \\left[ 5 \\right]    \\!$$  
 
               
                              
                             
               '))),
-
-              h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below left.")), 
-
-
-                  withMathJax(
-                      helpText(
-                               tags$span(style="color:black",
-            ' 
+                                       
+                                       h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below left.")), 
+                                       
+                                       
+                                       withMathJax(
+                                         helpText(
+                                           tags$span(style="color:black",
+                                                     ' 
                $$\\frac{  {\\it{s}^2} {(n-1)} } {\\sigma^2} \\sim {\\chi^2}_{(n - 1)} \\qquad \\qquad  \\qquad \\qquad  \\qquad \\left[ 4 \\right]  \\!$$ 
                             
               '))),
-
-
-
- 
-                                      h4(htmlOutput("textWithNumber2",) ),
-
- 
-
-                                      fluidRow(
-                                        column(width = 6, offset = 0, style='padding:1px;',
-                                               
-                                               div(plotOutput("his2",  width=fig.width7, height=fig.height7))
-                                        ) ,
-                                        
-                                        
-                                        fluidRow(
-                                          column(width = 5, offset = 0, style='padding:1px;',
-                                                 
-                                                 div(plotOutput("his",  width=fig.width7, height=fig.height7)),
-                                          )))
-
-
-
+                                       
+                                       
+                                       
+                                       
+                                       h4(htmlOutput("textWithNumber2",) ),
+                                       
+                                       
+                                       
+                                       fluidRow(
+                                         column(width = 6, offset = 0, style='padding:1px;',
+                                                
+                                                div(plotOutput("his2",  width=fig.width7, height=fig.height7))
+                                         ) ,
+                                         
+                                         
+                                         fluidRow(
+                                           column(width = 5, offset = 0, style='padding:1px;',
+                                                  
+                                                  div(plotOutput("his",  width=fig.width7, height=fig.height7)),
+                                           )))
+                                       
+                                       
+                                       
                               ) ,
                               
                               tabPanel("2 A single simulation ", value=3, 
-                                         
+                                       
                                        
                                        
                                        fluidRow(
@@ -227,153 +227,163 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                                 div( verbatimTextOutput("sd1")),
                                                 
                                                 
-   # HTML(paste0("", tags$span(style="color:blue",  "(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ))) ,
+                                                # HTML(paste0("", tags$span(style="color:blue",  "(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ))) ,
                                                 
-                                               h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
-     div( verbatimTextOutput("datx")),
+                                                h4("(3) Upper one-sided specification for the standard deviation of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)"), 
+                                                div( verbatimTextOutput("datx")),
                                                 
                                                 
                                                 
                                                 h4("(4) The variance of the replicates in (1)"), 
                                                 div( verbatimTextOutput("var1")),
-   h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ) ,
-   
-                                             #  tags$span(style="color:blue",  "(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ) ,
-                                                 div( verbatimTextOutput("datxy")),
+                                                h4("(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ) ,
+                                                
+                                                #  tags$span(style="color:blue",  "(5) Upper one-sided specification for variance of the replicates (see alpha level); based on the population standard deviation and number of replicates, not dependent on actual replicate values in (1)" ) ,
+                                                div( verbatimTextOutput("datxy")),
                                                 
                                                 h4("(6) Confidence interval for the standard deviation using the replicates in (1) (two-sided based on alpha level)"), 
                                                 div( verbatimTextOutput("conf2")),
                                                 
                                                 h4("(7) Confidence interval for the variance using the replicates in (1) (two-sided based on alpha level)"), 
                                                 div( verbatimTextOutput("conf")),
-                                               
+                                                
                                          ) ,
+                                         
+                                         
+                                         
+                                         
+                                         
+                                         fluidRow(
+                                           column(width = 7, offset = 0, style='padding:1px;',
+                                                  # h4(paste("Figure 3. xxxxxxxxxxxxxxxxxxxxxxx.")), 
+                                                  
+                                           )),
+                                         
+                                         
+                                       )),
+                              
+                              
+                              ######
+                              
+                              tabPanel("3 Upload your own data for analysis", fluid = TRUE,
                                        
-                                       
-                                          
-                                 
-                                     
-                                       fluidRow(
-                                         column(width = 7, offset = 0, style='padding:1px;',
-                                               # h4(paste("Figure 3. xxxxxxxxxxxxxxxxxxxxxxx.")), 
-                                           
-                                         )),
-                                       
-                                       
-                              )),
-               
-   
-   ######
-   
-   tabPanel("3 Upload your own data for analysis", fluid = TRUE,
-            
-            h4(("Upload your own data for analysis, the two radio button options are to help load.
+                                       h4(("Upload your own data for analysis, the two radio button options are to help load.
                                   
                                   ")) ,
-            
-            h4(("We have an example data set to get things started (download the file and click 'Browse...' to locate and upload for analysis). 
+                                       
+                                       h4(("We have an example data set to get things started (download the file and click 'Browse...' to locate and upload for analysis). 
             This is SIDS data, 11 cases of baby birth weights in grams, the data can be found on page 97 of reference [2]. 
             For this data enter an alpha of 0.05 for 95% 
                 CIs and 800 for the population SD (as stated in the reference). There is no need to enter the number of replicates, 
                 this is automatically determined.
                 We output the data, SD, one-sided SD specification and confidence intervals for SD and variance.")) ,
-             
-            
-            div(p(" ")),
-            tags$a(href = "https://raw.githubusercontent.com/eamonn2014/sd-specification/master/SIDS",  
-                   tags$span(style="color:blue", "Link to a file of the example dataset"),),   
-            div(p(" ")),
-         
-            sidebarLayout(
-              
-              # Sidebar panel for inputs ----
-              sidebarPanel(
-                
-                # Input: Select a file ----
-                fileInput("file1", "Choose CSV File",
-                          multiple = TRUE,
-                          accept = c("text/csv",
-                                     "text/comma-separated-values,text/plain",
-                                     ".csv")),
-                
-                # Horizontal line ----
-                tags$hr(),
-                
-                # Input: Checkbox if file has header ----
-                checkboxInput("header", "Header", FALSE),
-                
-                # Input: Select separator ----
-                radioButtons("sep", "Separator",
-                             choices = c(Comma = ",",
-                                         Semicolon = ";",
-                                         Tab = "\t",
-                                         Whitespace = ""),
-                             selected = ","),
-                
-                # Input: Select quotes ----
-                radioButtons("quote", "Quote",
-                             choices = c(None = "",
-                                         "Double Quote" = '"',
-                                         "Single Quote" = "'"),
-                             selected = ''),
-                
-                # Horizontal line ----
-                tags$hr(),
-                
-                # Input: Select number of rows to display ----
-              #   radioButtons("disp", "Display",
-              #                choices = c(Head = "head",
-              #                            All = "all"),
-              #                selected = "head"),
-              #   
-              #   # Horizontal line ----
-              #   tags$hr(),
-              #   
-              #   # Input: Select number of rows to display ----
-              #   radioButtons("what", "Output",
-              #                choices = c(Analysis = "Analysis",
-              #                            Plot = "plot"),
-              #                selected = "Analysis")
-              #   
-              ),
-              
-              # Main panel for displaying outputs ----
-              mainPanel(
-                
-                # Output: Data file ----
-                
-                
-                 div(verbatimTextOutput("contents2")),
-            #    div(verbatimTextOutput("contents3")),
-                # plotOutput("plotx"),
-                # tags$hr(),
-                # 
-                # tableOutput("contents") 
-                
-                
-              ),
-            )
-   ) ,
-   
-   
-   
-   
-   ######
-   
-                             
-                             tabPanel("4 Theory", value=3, 
-                                      
-                           
-                                   tags$span(style="color:black",
-                                   HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance sigma squared")),
-
-                                   br(),
-
-                                   withMathJax(
-                                    
-                                     helpText(
+                                       
+                                       
+                                       div(p(" ")),
+                                       tags$a(href = "https://raw.githubusercontent.com/eamonn2014/sd-specification/master/SIDS",  
+                                              tags$span(style="color:blue", "Link to a file of the example dataset"),),   
+                                       div(p(" ")),
+                                       
+                                       sidebarLayout(
+                                         
+                                         # Sidebar panel for inputs ----
+                                         sidebarPanel(
+                                           
+                                           # Input: Select a file ----
+                                           fileInput("file1", "Choose CSV File",
+                                                     multiple = TRUE,
+                                                     accept = c("text/csv",
+                                                                "text/comma-separated-values,text/plain",
+                                                                ".csv")),
+                                           
+                                           # Horizontal line ----
+                                           tags$hr(),
+                                           
+                                           # Input: Checkbox if file has header ----
+                                           checkboxInput("header", "Header", FALSE),
+                                           
+                                           # Input: Select separator ----
+                                           radioButtons("sep", "Separator",
+                                                        choices = c(Comma = ",",
+                                                                    Semicolon = ";",
+                                                                    Tab = "\t",
+                                                                    Whitespace = ""),
+                                                        selected = ","),
+                                           
+                                           # Input: Select quotes ----
+                                           radioButtons("quote", "Quote",
+                                                        choices = c(None = "",
+                                                                    "Double Quote" = '"',
+                                                                    "Single Quote" = "'"),
+                                                        selected = ''),
+                                           
+                                           # Horizontal line ----
+                                           tags$hr(),
+                                           
+                                           # Input: Select number of rows to display ----
+                                           #   radioButtons("disp", "Display",
+                                           #                choices = c(Head = "head",
+                                           #                            All = "all"),
+                                           #                selected = "head"),
+                                           #   
+                                           #   # Horizontal line ----
+                                           #   tags$hr(),
+                                           #   
+                                           #   # Input: Select number of rows to display ----
+                                           #   radioButtons("what", "Output",
+                                           #                choices = c(Analysis = "Analysis",
+                                           #                            Plot = "plot"),
+                                           #                selected = "Analysis")
+                                           #   
+                                         ),
+                                         
+                                         # Main panel for displaying outputs ----
+                                         mainPanel(
+                                           
+                                           # Output: Data file ----
+                                           
+                                           
+                                           div(verbatimTextOutput("contents2")),
+                                           #    div(verbatimTextOutput("contents3")),
+                                           # plotOutput("plotx"),
+                                           # tags$hr(),
+                                           # 
+                                           # tableOutput("contents") 
+                                           
+                                           
+                                         ),
+                                       )
+                              ) ,
+                              
+                              
+                              
+                              tabPanel("xxxxxxx",  
+                                       
+                                       p("xxxxxxxxxxxxxxxxx") ,
+                                       
+                                     
+                                       plotOutput('plotx', width = "1300px", height = "500px"),
+                                       actionButton('goPlot', 'Go plot')
+                                       
+                                       
+                                       
+                              ),
+                              ######
+                              
+                              
+                              tabPanel("4 Theory", value=3, 
+                                       
+                                       
                                        tags$span(style="color:black",
-                                     'It is well known, with n being the number of replicate measurements, that 
+                                                 HTML(" <strong>We assume that the measurement errors are independently and identically normally distributed with a mean of zero and variance sigma squared")),
+                                       
+                                       br(),
+                                       
+                                       withMathJax(
+                                         
+                                         helpText(
+                                           tags$span(style="color:black",
+                                                     'It is well known, with n being the number of replicate measurements, that 
                                      
                                      $$\\frac{{ {\\sum_i} (X_i - \\bar{X})^2}} {\\sigma^2}  \\sim {\\chi^2}_{(n - 1)}  \\qquad  \\qquad \\qquad  \\qquad \\left[ 1 \\right]  \\!$$ 
                                    
@@ -414,18 +424,24 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                       $$ {  P\\left[   { \\frac{  {\\it{s}^2} {(n-1)} } {(\\chi^2_{(n - 1), (1-\\alpha/2)} )}}     \\le   {\\sigma^2}  \\le  { \\frac{  {\\it{s}^2} {(n-1)} } {(\\chi^2_{(n - 1), (\\alpha/2)}) }}     \\right]    =   1-\\alpha    }  \\qquad \\qquad  \\qquad\\qquad \\qquad  \\qquad \\left[ 8 \\right]  \\!$$ 
 
                                      '))),
-
-                                   
-                                   br(),
-                                   br(),
-                                   br(),
-                                   br()
-                               
-                             )
+                                       
+                                       
+                                       br(),
+                                       br(),
+                                       br(),
+                                       br()
+                                       
+                              )
                               #############################
-                           
+                              
+                          
+                              
+                              #############################
                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   END NEW   
                             )
+                            
+                            
+                         
                             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   )
                 ) 
@@ -437,7 +453,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
 server <- shinyServer(function(input, output   ) {
   
   shinyalert("Welcome! \nInference concerning a population variance!",
-             "...the standard deviaiton of a standard deviation...", 
+             "...the variation of a variance...", 
              type = "info")
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -450,12 +466,12 @@ server <- shinyServer(function(input, output   ) {
     popsd <- as.numeric(unlist(strsplit(input$popsd,",")))
     sims <- as.numeric(unlist(strsplit(input$sims,",")))
     reps <- as.numeric(unlist(strsplit(input$reps,",")))
-
+    
     return(list(  
       sims=sims[1],   # Number of simulation
       reps=reps[1],   # replicates
       popsd=popsd[1]  # sd
-     
+      
     ))
     
   })
@@ -465,7 +481,7 @@ server <- shinyServer(function(input, output   ) {
   step <- reactive({
     
     sample <- random.sample()
- 
+    
     
     popsd. <- as.numeric(unlist(strsplit(input$popsd,",")))
     sims.  <- as.numeric(unlist(strsplit(input$sims,",")))
@@ -480,21 +496,21 @@ server <- shinyServer(function(input, output   ) {
   
   
   
-
+  
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # tab 1 simulate po model data and analyse
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~NOT OK
   spec <- reactive({
     
-  #sample <- random.sample()  code this out
+    #sample <- random.sample()  code this out
     
-  popsd.  <- step()$popsd.
-  sims. <- step()$sims.
-  reps.   <- step()$reps. 
- 
- 
+    popsd.  <- step()$popsd.
+    sims. <- step()$sims.
+    reps.   <- step()$reps. 
+    
+    
     alpha.  <-    isolate(as.numeric(unlist(strsplit(input$alpha,","))) )  ### isolate this so not update with clicking resample button
-   
+    
     spec. <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
     
     x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
@@ -506,7 +522,7 @@ server <- shinyServer(function(input, output   ) {
     return(list( sims.=sims., reps.=reps., alpha.=alpha., popsd.=popsd. , spec.=spec., x1=x1, sim.=sim., onesample=onesample)) 
     
   })
-   
+  
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ci0 <- reactive({
     
@@ -517,14 +533,14 @@ server <- shinyServer(function(input, output   ) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~OK
   # ci of pop from sample
   ci <- reactive({
- 
+    
     dat <- ci0()$d
     # alpha selected here
     alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )
-   
+    
     df <- length(dat)-1
     est <- var(dat)
-   
+    
     lower <- df* est/qchisq(df=df, p=1-alpha./2)
     upper <- df* est/qchisq(df=df, p=alpha./2)
     
@@ -599,7 +615,7 @@ server <- shinyServer(function(input, output   ) {
     
     return(print(d, digits=4))
   })
- #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$dat1 <- renderPrint({
     
@@ -622,13 +638,13 @@ server <- shinyServer(function(input, output   ) {
     reps. <-   sample$reps
     popsd.<-   sample$popsd
     sims. <-   sample$sims
-
+    
     h <-  hist(dx,  breaks="FD", xlab="Standard deviation", xlim=c(0, sp*1.1),
-    main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,"black line indicates the upper specification of", p4(sp) ) , col="violet", border='blue')
+               main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,"black line indicates the upper specification of", p4(sp) ) , col="violet", border='blue')
     abline(v = sp, col="black",   lwd = 2, lty=2)
-
-    })
-
+    
+  })
+  
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # plot 2
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
@@ -636,7 +652,7 @@ server <- shinyServer(function(input, output   ) {
   output$his2 <- renderPlot({
     
     sample <- random.sample()
-     
+    
     dx <-  spec()$x1
     sp <- spec()$spec.
     
@@ -645,16 +661,16 @@ server <- shinyServer(function(input, output   ) {
     alpha.  <-   sample$alpha
     popsd.  <-   sample$popsd
     df      <-   reps. -1
- 
-     z <- (dx^2)*(df)/(popsd.^2) ## this is chi square distributed.  
-
+    
+    z <- (dx^2)*(df)/(popsd.^2) ## this is chi square distributed.  
+    
     h <-  hist(z,   breaks="FD", xlab="Chi-square distribution", prob=TRUE,
                main=paste0("Blue dashed line is the chi-square distribution with d.f =", df, ", histogram created 
                using equation 4 pluging in the simulated squared SDs (right histogram), \ndegrees of freedom and population standard variance ", p4(popsd.^2) ) , col="violet", border='blue')
-
+    
     curve( dchisq(x, df=df) , col='blue', add=TRUE, lty=2, lwd=3)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   
+    
   })
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -664,34 +680,34 @@ server <- shinyServer(function(input, output   ) {
   output$textWithNumber <- renderText({ 
     
     dis <- as.numeric(unlist(strsplit(input$popsd,",")))
-   # n <- as.numeric(unlist(strsplit(input$sims,",")))
+    # n <- as.numeric(unlist(strsplit(input$sims,",")))
     ctr <- as.numeric(unlist(strsplit(input$reps,",")))
     or1<- as.numeric(unlist(strsplit(input$alpha,",")))
     
-   # d1 <- spec()$sim.
-  #  d <- spec()$spec.
+    # d1 <- spec()$sim.
+    #  d <- spec()$spec.
     
     
     HTML(paste0( "With a population standard deviation of "
                  , tags$span(style="color:purple",  p4( dis) ) ,
                  " from a reliable source we will evaluate  "
                  , tags$span(style="color:purple",  p0(ctr) ) ," replicates.",
-
+                 
                  " We have set the one sided alpha level to "
                  , tags$span(style="color:purple",  p8(or1) ) ,
-                ". This is equivalent to a upper confidence limit of ",
-                tags$span(style="color:purple",  p5(100*(1-or1)) ) , 
-                tags$span(style="color:purple",   "%. " ) , 
-                
-                "This means we are prepared to accept  "
+                 ". This is equivalent to a upper confidence limit of ",
+                 tags$span(style="color:purple",  p5(100*(1-or1)) ) , 
+                 tags$span(style="color:purple",   "%. " ) , 
+                 
+                 "This means we are prepared to accept  "
                  , tags$span(style="color:purple",  p0(or1*1e6) ) ,
                  " out of specification results if we were to perform 1 million evaluations 
                 using "
                  , tags$span(style="color:purple",  p0(ctr) ) ," replicates",
                  ", when in truth every sample of " 
-                , tags$span(style="color:purple",  p0(ctr) ) ," replicates are from the stated population. "
-                
-          
+                 , tags$span(style="color:purple",  p0(ctr) ) ," replicates are from the stated population. "
+                 
+                 
     ))    
     
   })
@@ -702,11 +718,11 @@ server <- shinyServer(function(input, output   ) {
   output$textWithNumber2 <- renderText({ 
     
     # sims <- as.numeric(unlist(strsplit(input$sims,",")))
-   # reps <- as.numeric(unlist(strsplit(input$reps,",")))
-     
- 
-   # d1 <- spec()$sim.   # simulated spec
-  #  d <- spec()$spec.   # analytical spec
+    # reps <- as.numeric(unlist(strsplit(input$reps,",")))
+    
+    
+    # d1 <- spec()$sim.   # simulated spec
+    #  d <- spec()$spec.   # analytical spec
     
     popsd.  <- step()$popsd.
     sims. <-   step()$sims.
@@ -717,41 +733,41 @@ server <- shinyServer(function(input, output   ) {
     
     d <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
     
-       
+    
     x1 <- replicate(sims., sd(rnorm( reps., 0, popsd.)) )
-     d1 <- quantile(x1, c(1-alpha.))   # simulation spec one sided
+    d1 <- quantile(x1, c(1-alpha.))   # simulation spec one sided
     
     
     HTML(paste0( 
-                 "We can therefore state if the standard deviation of the "
-                 , tags$span(style="color:purple",  p0(reps.) ) ,
-                 " replicated measurements is less than or equal to the calculated specification of "
-                 
-                 , tags$span(style="color:purple",  p4(d) ) ,
-                 
-                 " the error is considered consistent with the established test method error. As an aside we can also check the analytically derived specification of "
-                 , tags$span(style="color:purple",  p4( d) ) ,
-                 " using simulation. With "
-                 , tags$span(style="color:purple",  (sims.) ) ," Monte Carlo simulations",
-
-                 
-                 " we estimate the specification as "
-                 , tags$span(style="color:purple",  p4(d1) ) ,". Remember to estimate a quantile in the extreme tails requires a very large number of Monte Carlo simulations."
-                 
-                 
+      "We can therefore state if the standard deviation of the "
+      , tags$span(style="color:purple",  p0(reps.) ) ,
+      " replicated measurements is less than or equal to the calculated specification of "
+      
+      , tags$span(style="color:purple",  p4(d) ) ,
+      
+      " the error is considered consistent with the established test method error. As an aside we can also check the analytically derived specification of "
+      , tags$span(style="color:purple",  p4( d) ) ,
+      " using simulation. With "
+      , tags$span(style="color:purple",  (sims.) ) ," Monte Carlo simulations",
+      
+      
+      " we estimate the specification as "
+      , tags$span(style="color:purple",  p4(d1) ) ,". Remember to estimate a quantile in the extreme tails requires a very large number of Monte Carlo simulations."
+      
+      
     ))    
     
   })
-
+  
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # analyse on user data, variance components for plot title
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+  
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
+  
   
   
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -768,7 +784,7 @@ server <- shinyServer(function(input, output   ) {
     
     df <-  (as.vector(df))
     
- return(list(df=df))
+    return(list(df=df))
     
     
     
@@ -777,43 +793,80 @@ server <- shinyServer(function(input, output   ) {
   
   
   
-   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   # PBE analysis of user uploaded data 
-   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   output$contents2 <- renderPrint({
-     
-       u <- user()$df
-       
-       sd.user <- sd(u)
-       
-       popsd.  <- step()$popsd.
-       sims. <-   step()$sims.
-       reps.   <- step()$reps. 
-       
-       
-       alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )  ### isolate this so not update with clicking resample button
-       
-       d <- sd.spec(input.sd=popsd., alph=alpha., n=length(u))    ### 
-       
-       
-       df <- length(u)-1
-       est <- sd.user^2
-       
-       lower <- df* est/qchisq(df=df, p=1-alpha./2)
-       upper <- df* est/qchisq(df=df, p=alpha./2)
-       
-       cis <- c(lower, upper)
-       sdcis <- c(lower^.5, upper^.5)
-       
-
- 
-       return(list(data=u , SD.user.data=sd.user, Variance.user.data=est , SD.spec.user.data=d,  SD.confidence.interval.user.data=sdcis, 
-                   Variance.confidence.interval.user.data=cis))
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # PBE analysis of user uploaded data 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  output$contents2 <- renderPrint({
+    
+    u <- user()$df
+    
+    sd.user <- sd(u)
+    
+    popsd.  <- step()$popsd.
+    sims. <-   step()$sims.
+    reps.   <- step()$reps. 
+    
+    
+    alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )  ### isolate this so not update with clicking resample button
+    
+    d <- sd.spec(input.sd=popsd., alph=alpha., n=length(u))    ### 
+    
+    
+    df <- length(u)-1
+    est <- sd.user^2
+    
+    lower <- df* est/qchisq(df=df, p=1-alpha./2)
+    upper <- df* est/qchisq(df=df, p=alpha./2)
+    
+    cis <- c(lower, upper)
+    sdcis <- c(lower^.5, upper^.5)
+    
+    
+    
+    return(list(data=u , SD.user.data=sd.user, Variance.user.data=est , SD.spec.user.data=d,  SD.confidence.interval.user.data=sdcis, 
+                Variance.confidence.interval.user.data=cis))
+    
+  })
+  
+  
+   
+  output$plotx <- renderPlot({
+    
+    input$goPlot # Re-run when button is clicked
+    
+    # Number of times we'll go through the loop
+    n <- 10
+    m <- 70
+    
+    cl <- sample(rainbow(n))
+    
+    s<- 1:10
+    plot(s,   type="n",  # hide the points
+         ylab="", xlab="", ylim=c(0,2.5), xlim=c(0,m) , pch=20, cex=.2)
+    abline(h=1)
+    
+    withProgress(message = 'Making plot', value = 0, {
+      
+      for (j in 1:n) {
         
-     })
-  
-  
-  
+        # Sys.sleep(.1)
+        
+        x <- rnorm(m, mean = 0, sd = 1)
+        s <- rep(NA,m)
+        
+        for (i in 2:m) {
+          s[i] <- sqrt(var(x[1:i]))
+        }
+        
+        lines(0:(m-1) ,s ,col = cl[j], type = 'l', pch=20, cex=1)
+        
+        
+      }
+      
+      
+    })
+    
+  })
   
   
   
