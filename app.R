@@ -382,7 +382,7 @@ become negligible?
 
 See an example of the standard deviation calculation
  on consecutively collected data values from a population with mean 0 and standard deviation 1. 
- This can be repeated as many times as one wishes and the number of consecutive colleccted samples can be varied.
+ This can be repeated as many times as one wishes and the number of consecutive collected samples can be varied.
   The standard deviation
  does wiggle around a bit, especially at sample sizes
 less than 100. After a while there is no obvious
@@ -908,9 +908,9 @@ server <- shinyServer(function(input, output   ) {
     
     cl <- sample(rainbow(n))
     
-    s<- 1:10  #dummy data
-    plot(s,   type="n",  # hide the points
-         ylab="", xlab="", ylim=c(0,3), xlim=c(0,m) , pch=20, cex=.2)
+    s<- 1:10  #dummy data and hide the points
+    plot(s,   type="n",  main ="Standard deviation with increasing sample size ",
+         ylab="SD", xlab="consecutive data points", ylim=c(0,3), xlim=c(0,m) , pch=20, cex=.2)
     abline(h=1)
     
     withProgress(message = 'Making plot', value = 0, {
