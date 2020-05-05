@@ -709,7 +709,9 @@ server <- shinyServer(function(input, output   ) {
     
  sp  <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
     
-    h <-  hist(dx,  breaks="FD", xlab="Standard deviation", xlim=c(0, sp*1.1),
+   limz<- ifelse(alpha. > 0.1, 7+sp*1.1 ,    sp*1.2) 
+ 
+    h <-  hist(dx,  breaks="FD", xlab="Standard deviation", xlim=c(0, limz),
                main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,", black line indicates the upper specification of", p4(sp) ) , 
                col="violet", border='blue')
     abline(v = sp, col="black",   lwd = 2, lty=2)
