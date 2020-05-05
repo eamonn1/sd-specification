@@ -85,7 +85,8 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 
                                 h4("Tab 1 presents the chi-squared sampling distribution and how to calculate a specification (false invalid risk) for a standard deviation (or variance).
                                    Tab 2 presents an example calculation based on the user inputs. 
-                                   Tab 3 allows a user to upload their own data and the final tab shows the theory."),
+                                   Tab 3 allows a user to upload their own data and the final tab shows the theory. 
+                                   Tab 4 investigates the stability of the standard deviation and the last tab explains a little of the theory."),
                                 
                                 h4("Instructions: The first input below is the number of Monte Carlo simulations. 
                                 The second is the true data generating population SD. The third input is the 
@@ -357,13 +358,74 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                               
                               
                               
-                              tabPanel("xxxxxxx",  
+                              tabPanel("4 Stability of the standard deviation",  
                                        
-                                       p("xxxxxxxxxxxxxxxxx") ,
-                                       
+                                       #p("xxxxxxxxxxxxxxxxx") ,
+                                       #https://shiny.rstudio.com/articles/progress.html
                                      
+                                       h4("
+ It is a common misconception that the standard deviation becomes smaller as the sample size
+increases. 
+                                       
+In fact the standard deviation does not decline as the sample size
+increases. The standard error does.
+One way to think about it is that the standard deviation
+is a measure of the variability of a single item,
+while the standard error is a measure of the variability
+of the average of all the items in the sample.
+
+What does happen is that the estimate of
+the standard deviation becomes more stable
+as the sample size increases.
+When does the instability of the standard deviation
+become negligible?
+
+See an example of the standard deviation calculation
+ on consecutively collected data values from a population with mean 0 and standard deviation 1. 
+ This can be repeated as many times as one wishes and the number of consecutive colleccted samples can be varied.
+  The standard deviation
+ does wiggle around a bit, especially at sample sizes
+less than 100. After a while there is no obvious
+upward or downward trend."),
+                                       
                                        plotOutput('plotx', width = "1300px", height = "500px"),
-                                       actionButton('goPlot', 'Go plot')
+                                       actionButton('goPlot', 'Repeat the experiment'),
+                                       
+                                       
+                                    
+                                       tags$hr(),
+                                   
+                                       
+                                       
+                                       splitLayout(
+                                         textInput("mc", div(h5(tags$span(style="color:blue", "Number of Monte Carlo simulations"))), value= "50"),
+                                         textInput("nn", div(h5(tags$span(style="color:blue", "Number of consecutively collected data points in each simulation from a N(0,1) population"))), value= "80") 
+                                         
+                                       ),
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
+                                       
                                        
                                        
                                        
@@ -371,7 +433,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                               ######
                               
                               
-                              tabPanel("4 Theory", value=3, 
+                              tabPanel("5 Theory", value=3, 
                                        
                                        
                                        tags$span(style="color:black",
@@ -835,14 +897,17 @@ server <- shinyServer(function(input, output   ) {
     input$goPlot # Re-run when button is clicked
     
     # Number of times we'll go through the loop
-    n <- 10
-    m <- 70
+  #  n <- 10
+  #  m <- 70
+    
+    n <- as.numeric(unlist(strsplit(input$mc,",")))
+    m <- as.numeric(unlist(strsplit(input$nn,",")))
     
     cl <- sample(rainbow(n))
     
-    s<- 1:10
+    s<- 1:10  #dummy data
     plot(s,   type="n",  # hide the points
-         ylab="", xlab="", ylim=c(0,2.5), xlim=c(0,m) , pch=20, cex=.2)
+         ylab="", xlab="", ylim=c(0,3), xlim=c(0,m) , pch=20, cex=.2)
     abline(h=1)
     
     withProgress(message = 'Making plot', value = 0, {
