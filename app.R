@@ -209,7 +209,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                            column(width = 5, offset = 0, style='padding:1px;',
                                                   
                                                   div(plotOutput("his",  width=fig.width7, height=fig.height7)),
-                                           )))
+                                           ))  )
                                        
                                        
                                        
@@ -412,11 +412,44 @@ upward or downward trend."),
                               tabPanel("5 Chi-square? Gamma?",  
                                        
                                        
-                                       h4(" Gamma, exponential, and related distributions"),
-                                       h4("in blue the Chi-square distribution, in red gamma and in green exponential. 
-                                       The degrees of freedom/shape parameter can be selected below. Notice all three will conincide when 2 is entered "), 
+                                       h4("Gamma, exponential, and related distributions. The chi square and exponential are special cases of the gamma distribution. In blue in the figure the Chi-square distribution, in red gamma and in green exponential. 
+                                       The degrees of freedom/shape parameter can be selected below, notice all three will conincide when 2 is entered "), 
                                     
-                                       plotOutput('ploty', width = "650px", height = "500px"),
+                                    
+                                       
+                                       fluidRow(
+                                         column(width = 2, offset = 0, style='padding:1px;',
+                                                radioButtons("dist",                "Distribution type:",
+                                                             
+                                                             c("Chi square"       = "chisquare",
+                                                               "Gamma"            = "gamma",
+                                                               "Exponential"      = "exp",
+                                                               "all of the above" = "all"
+                                                               ), selected = "chisquare"
+                                                             ),
+                                                
+                                         ),
+                                         
+                                         
+                                         withMathJax(
+                                           
+                                           helpText(
+                                             tags$span(style="color:black",
+                                              '$${{  \\text{Gamma} \\qquad X \\sim \\Gamma}} (\\frac{k}{2}, \\frac{1}{2}) , \\qquad \\qquad  \\text{Exponential} \\qquad   {{   X \\sim \\exp}} (\\frac{1}{2})   \\!$$' 
+                                             )) ) ,
+                                         
+                                          
+                                         
+                                         fluidRow(
+                                           column(width = 9, offset = 0, style='padding:1px;',
+                                                  
+                                                  plotOutput('ploty', width = "900px", height = "500px"),
+                                           ))  ),
+                                       
+                                       
+                                       
+                                       
+                                       
                                        actionButton('goPlot2', 'Repeat the experiment'),
                                        tags$hr(),
                                        splitLayout(
@@ -907,14 +940,49 @@ server <- shinyServer(function(input, output   ) {
     
     sim <- as.numeric(unlist(strsplit(input$n,",")))
     dof <- as.numeric(unlist(strsplit(input$dof,",")))
-     
+    
     ch <- rchisq(sim, dof)
     ga <- rgamma(sim, dof/2, 1/2)
     ex <- rexp(sim,  1/2)
+    
+    if (input$dist %in% "chisquare") {
+    
+    plot(density(ch), col='blue', main ="Probability density functions chi-square")
    
+    }
+    
+    else if (input$dist %in% "gamma") {
+      
+      plot(density(ga), col='red', main ="Probability density functions gamma")
+      
+    }
+    
+    else if (input$dist %in% "exp") {
+      
+      plot(density(ex), col='green', main ="Probability density functions exponential")
+      
+    }
+    
+    else if (input$dist %in% "all") {
+  
     plot(density(ch), col='blue', main ="Probability density functions chi-square, gamma and exponential")
     lines(density(ga), col='red')
     lines(density(ex), col='green')
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
   })
