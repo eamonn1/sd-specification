@@ -404,36 +404,40 @@ upward or downward trend."),
                                        ),
                                        
                                        
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
+                                            
                               ),
                               ######
                               
                               
-                              tabPanel("5 Theory", value=3, 
+                              tabPanel("5 Chi-square? Gamma?",  
+                                       
+                                       
+                                       h4(" Gamma, exponential, and related distributions"),
+                                       h4("in blue the Chi-square distribution, in red gamma and in green exponential. 
+                                       The degrees of freedom/shape parameter can be selected below. Notice all three will conincide when 2 is entered "), 
+                                    
+                                       plotOutput('ploty', width = "650px", height = "500px"),
+                                       actionButton('goPlot2', 'Repeat the experiment'),
+                                       tags$hr(),
+                                       splitLayout(
+                                         textInput("n", div(h5(tags$span(style="color:blue", "data points"))), value= "1000") ,
+                                         textInput("dof", div(h5(tags$span(style="color:blue", "degrees of freedom"))), value= "2")
+                                       ),
+                              
+                                       div(h4("Reference:")),  
+                                       tags$a(href = "https://en.wikipedia.org/wiki/Chi-squared_distribution#Gamma,_exponential,_and_related_distributions", tags$span(style="color:blue", "[3] Chi-squared distribution"),),   
+                                       div(p(" ")),
+ 
+                                       tags$hr(),
+                                       
+                                       
+                                     
+                              ),
+                              
+                              
+                              #####
+                              
+                              tabPanel("6 Theory", value=3, 
                                        
                                        
                                        tags$span(style="color:black",
@@ -897,13 +901,34 @@ server <- shinyServer(function(input, output   ) {
   
   
    
+  output$ploty <- renderPlot({
+    
+    input$goPlot2 # Re-run when button is clicked
+    
+    sim <- as.numeric(unlist(strsplit(input$n,",")))
+    dof <- as.numeric(unlist(strsplit(input$dof,",")))
+     
+    ch <- rchisq(sim, dof)
+    ga <- rgamma(sim, dof/2, 1/2)
+    ex <- rexp(sim,  1/2)
+   
+    plot(density(ch), col='blue', main ="Probability density functions chi-square, gamma and exponential")
+    lines(density(ga), col='red')
+    lines(density(ex), col='green')
+    
+    
+  })
+  
+  
+  ################
+  
   output$plotx <- renderPlot({
     
     input$goPlot # Re-run when button is clicked
     
     # Number of times we'll go through the loop
-  #  n <- 10
-  #  m <- 70
+    #  n <- 10
+    #  m <- 70
     
     n <- as.numeric(unlist(strsplit(input$mc,",")))
     m <- as.numeric(unlist(strsplit(input$nn,",")))
@@ -937,9 +962,6 @@ server <- shinyServer(function(input, output   ) {
     })
     
   })
-  
-  
-  
   
   
   
