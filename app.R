@@ -91,7 +91,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 h4("Instructions: The first input below is the number of Monte Carlo simulations. 
                                 The second is the true data generating population SD. The third input is the 
                                    number of replicates to be generated. The last input is the alpha level, 
-                                   the default set at a one-sided 3 in a million level."),
+                                   the default is set at a one-sided 3 in a million level."),
                                 div(
                                   
                                   tags$head(
@@ -180,7 +180,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                             
               '))),
                                        
-                                       h4(paste("Plugging in the population variance the number of replicates (n) and the simulated data into equation [4] we create the plot below left.")), 
+                                       h4(paste("Plugging in the population variance, the number of replicates (n) and simulated data based on the inputs left into equation [4] we create the plot below left.")), 
                                        
                                        
                                        withMathJax(
