@@ -86,7 +86,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                 h4("Tab 1 presents the chi-squared sampling distribution and how to calculate a specification (false invalid risk) for a standard deviation (or variance).
                                    Tab 2 presents an example calculation based on the user inputs. 
                                    Tab 3 allows a user to upload their own data and the final tab shows the theory. 
-                                   Tab 4 investigates the stability of the standard deviation and the last tab explains a little of the theory."),
+                                   Tab 4 investigates the stability of the standard deviation, Tab 5 explores some relationships between the chi distribution and others and the last tab explains a little of the theory."),
                                 
                                 h4("Instructions: The first input below is the number of Monte Carlo simulations. 
                                 The second is the true data generating population SD. The third input is the 
@@ -362,7 +362,7 @@ ui <- fluidPage(theme = shinytheme("journal"), #https://www.rdocumentation.org/p
                                        
                                        #p("xxxxxxxxxxxxxxxxx") ,
                                        #https://shiny.rstudio.com/articles/progress.html
-                                     
+                                       
                                        h4("
  It is a common misconception that the standard deviation becomes smaller as the sample size
 increases. 
@@ -392,9 +392,9 @@ upward or downward trend."),
                                        actionButton('goPlot', 'Repeat the experiment'),
                                        
                                        
-                                    
+                                       
                                        tags$hr(),
-                                   
+                                       
                                        
                                        
                                        splitLayout(
@@ -404,7 +404,7 @@ upward or downward trend."),
                                        ),
                                        
                                        
-                                            
+                                       
                               ),
                               ######
                               
@@ -414,28 +414,19 @@ upward or downward trend."),
                                        
                                        h4("Gamma, exponential, and related distributions. The chi square and exponential are special cases of the gamma distribution. In blue in the figure the Chi-square distribution, in red gamma and in green exponential. 
                                        The degrees of freedom/shape parameter can be selected below, notice all three will conincide when 2 is entered "), 
-                                    
-<<<<<<< HEAD
-                                    
-=======
-                                     #  plotOutput('ploty', width = "650px", height = "500px"),
                                        
->>>>>>> de5bbc68856b86fff109038e87146100214fa526
+                                       
                                        
                                        fluidRow(
                                          column(width = 2, offset = 0, style='padding:1px;',
                                                 radioButtons("dist",                "Distribution type:",
-<<<<<<< HEAD
                                                              
-=======
->>>>>>> de5bbc68856b86fff109038e87146100214fa526
                                                              c("Chi square"       = "chisquare",
                                                                "Gamma"            = "gamma",
                                                                "Exponential"      = "exp",
                                                                "all of the above" = "all"
-                                                               ), selected = "chisquare"
-                                                             ),
-<<<<<<< HEAD
+                                                             ), selected = "chisquare"
+                                                ),
                                                 
                                          ),
                                          
@@ -444,13 +435,10 @@ upward or downward trend."),
                                            
                                            helpText(
                                              tags$span(style="color:black",
-                                              '$${{  \\text{Gamma} \\qquad X \\sim \\Gamma}} (\\frac{k}{2}, \\frac{1}{2}) , \\qquad \\qquad  \\text{Exponential} \\qquad   {{   X \\sim \\exp}} (\\frac{1}{2})   \\!$$' 
+                                                       '$${{  \\text{Gamma} \\qquad X \\sim \\Gamma}} (\\frac{k}{2}, \\frac{1}{2}) , \\qquad \\qquad  \\text{Exponential} \\qquad   {{   X \\sim \\exp}} (\\frac{1}{2})   \\!$$' 
                                              )) ) ,
-=======
-                                         ) ,
->>>>>>> de5bbc68856b86fff109038e87146100214fa526
                                          
-                                          
+                                         
                                          
                                          fluidRow(
                                            column(width = 9, offset = 0, style='padding:1px;',
@@ -468,15 +456,15 @@ upward or downward trend."),
                                          textInput("n", div(h5(tags$span(style="color:blue", "data points"))), value= "1000") ,
                                          textInput("dof", div(h5(tags$span(style="color:blue", "degrees of freedom"))), value= "2")
                                        ),
-                              
+                                       
                                        div(h4("Reference:")),  
                                        tags$a(href = "https://en.wikipedia.org/wiki/Chi-squared_distribution#Gamma,_exponential,_and_related_distributions", tags$span(style="color:blue", "[3] Chi-squared distribution"),),   
                                        div(p(" ")),
- 
+                                       
                                        tags$hr(),
                                        
                                        
-                                     
+                                       
                               ),
                               
                               
@@ -545,14 +533,14 @@ upward or downward trend."),
                               )
                               #############################
                               
-                          
+                              
                               
                               #############################
                               #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   END NEW   
                             )
                             
                             
-                         
+                            
                             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   )
                 ) 
@@ -751,15 +739,15 @@ server <- shinyServer(function(input, output   ) {
     # sims. <-   sample$sims
     
     popsd.  <- step()$popsd.
-   sims. <- step()$sims.
+    sims. <- step()$sims.
     reps.   <- step()$reps. 
     
     alpha.  <-    (as.numeric(unlist(strsplit(input$alpha,","))) )  ### 
     
- sp  <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
+    sp  <- sd.spec(input.sd=popsd., alph=alpha., n=reps.)    ### 
     
-   limz<- ifelse(alpha. > 0.1, 7+sp*1.1 ,    sp*1.2) 
- 
+    limz<- ifelse(alpha. > 0.1, 7+sp*1.1 ,    sp*1.2) 
+    
     h <-  hist(dx,  breaks="FD", xlab="Standard deviation", xlim=c(0, limz),
                main=paste("Distribution of",sims., "SDs each of sample size", reps.,"drawn from a \npopulation SD of",popsd.,", black line indicates the upper specification of", p4(sp) ) , 
                col="violet", border='blue')
@@ -945,17 +933,9 @@ server <- shinyServer(function(input, output   ) {
   })
   
   
-   
+  
   output$ploty <- renderPlot({
     
-    
-    # dist <- switch(input$dist,
-    #                chisquare = chisquare,
-    #                gamma = gamma,
-    #                exp = exp,
-    #                all = all )
-
-      
     input$goPlot2 # Re-run when button is clicked
     
     sim <- as.numeric(unlist(strsplit(input$n,",")))
@@ -966,41 +946,29 @@ server <- shinyServer(function(input, output   ) {
     ex <- rexp(sim,  1/2)
     
     if (input$dist %in% "chisquare") {
-    
-<<<<<<< HEAD
-    plot(density(ch), col='blue', main ="Probability density functions chi-square")
-=======
-    plot(density(ch), col='blue', main ="Probability density functions chi-square, gamma and exponential")
->>>>>>> de5bbc68856b86fff109038e87146100214fa526
-   
+      
+      plot(density(ch), col='blue', main ="Probability density functions chi-square")
+      
     }
     
     else if (input$dist %in% "gamma") {
       
-<<<<<<< HEAD
       plot(density(ga), col='red', main ="Probability density functions gamma")
-=======
-      plot(density(ga), col='blue', main ="Probability density functions chi-square, gamma and exponential")
->>>>>>> de5bbc68856b86fff109038e87146100214fa526
       
     }
     
     else if (input$dist %in% "exp") {
       
-<<<<<<< HEAD
       plot(density(ex), col='green', main ="Probability density functions exponential")
-=======
-      plot(density(ex), col='blue', main ="Probability density functions chi-square, gamma and exponential")
->>>>>>> de5bbc68856b86fff109038e87146100214fa526
       
     }
     
     else if (input$dist %in% "all") {
-  
-    plot(density(ch), col='blue', main ="Probability density functions chi-square, gamma and exponential")
-    lines(density(ga), col='red')
-    lines(density(ex), col='green')
-    
+      
+      plot(density(ch), col='blue', main ="Probability density functions chi-square, gamma and exponential")
+      lines(density(ga), col='red')
+      lines(density(ex), col='green')
+      
     }
     
     
