@@ -415,18 +415,27 @@ upward or downward trend."),
                                        h4("Gamma, exponential, and related distributions. The chi square and exponential are special cases of the gamma distribution. In blue in the figure the Chi-square distribution, in red gamma and in green exponential. 
                                        The degrees of freedom/shape parameter can be selected below, notice all three will conincide when 2 is entered "), 
                                     
+<<<<<<< HEAD
                                     
+=======
+                                     #  plotOutput('ploty', width = "650px", height = "500px"),
+                                       
+>>>>>>> de5bbc68856b86fff109038e87146100214fa526
                                        
                                        fluidRow(
                                          column(width = 2, offset = 0, style='padding:1px;',
                                                 radioButtons("dist",                "Distribution type:",
+<<<<<<< HEAD
                                                              
+=======
+>>>>>>> de5bbc68856b86fff109038e87146100214fa526
                                                              c("Chi square"       = "chisquare",
                                                                "Gamma"            = "gamma",
                                                                "Exponential"      = "exp",
                                                                "all of the above" = "all"
                                                                ), selected = "chisquare"
                                                              ),
+<<<<<<< HEAD
                                                 
                                          ),
                                          
@@ -437,6 +446,9 @@ upward or downward trend."),
                                              tags$span(style="color:black",
                                               '$${{  \\text{Gamma} \\qquad X \\sim \\Gamma}} (\\frac{k}{2}, \\frac{1}{2}) , \\qquad \\qquad  \\text{Exponential} \\qquad   {{   X \\sim \\exp}} (\\frac{1}{2})   \\!$$' 
                                              )) ) ,
+=======
+                                         ) ,
+>>>>>>> de5bbc68856b86fff109038e87146100214fa526
                                          
                                           
                                          
@@ -936,6 +948,14 @@ server <- shinyServer(function(input, output   ) {
    
   output$ploty <- renderPlot({
     
+    
+    # dist <- switch(input$dist,
+    #                chisquare = chisquare,
+    #                gamma = gamma,
+    #                exp = exp,
+    #                all = all )
+
+      
     input$goPlot2 # Re-run when button is clicked
     
     sim <- as.numeric(unlist(strsplit(input$n,",")))
@@ -947,19 +967,31 @@ server <- shinyServer(function(input, output   ) {
     
     if (input$dist %in% "chisquare") {
     
+<<<<<<< HEAD
     plot(density(ch), col='blue', main ="Probability density functions chi-square")
+=======
+    plot(density(ch), col='blue', main ="Probability density functions chi-square, gamma and exponential")
+>>>>>>> de5bbc68856b86fff109038e87146100214fa526
    
     }
     
     else if (input$dist %in% "gamma") {
       
+<<<<<<< HEAD
       plot(density(ga), col='red', main ="Probability density functions gamma")
+=======
+      plot(density(ga), col='blue', main ="Probability density functions chi-square, gamma and exponential")
+>>>>>>> de5bbc68856b86fff109038e87146100214fa526
       
     }
     
     else if (input$dist %in% "exp") {
       
+<<<<<<< HEAD
       plot(density(ex), col='green', main ="Probability density functions exponential")
+=======
+      plot(density(ex), col='blue', main ="Probability density functions chi-square, gamma and exponential")
+>>>>>>> de5bbc68856b86fff109038e87146100214fa526
       
     }
     
